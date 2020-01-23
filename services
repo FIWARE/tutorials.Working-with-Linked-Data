@@ -15,7 +15,7 @@ fi
 
 waitForOrion () {
 	echo -e "\n⏳ Waiting for \033[1;34mOrion\033[0m to be available\n"
-	while [ `docker run --network fiware_default --rm appropriate/curl -s -o /dev/null -w %{http_code} 'http://orion:1026/version'` -eq 000 ]
+	while [ `docker run --network fiware_default --rm curlimages/curl -s -o /dev/null -w %{http_code} 'http://orion:1026/version'` -eq 000 ]
 	do 
 	  echo -e "Context Broker HTTP state: " `curl -s -o /dev/null -w %{http_code} 'http://localhost:1026/version'` " (waiting for 200)"
 	  sleep 1
@@ -24,13 +24,13 @@ waitForOrion () {
 
 waitForScorpio () {
 	echo -e "\n⏳ Waiting for \033[1;34mScorpio\033[0m to respond\n"
-	while [ `docker run --network fiware_default --rm appropriate/curl -s -o /dev/null -w %{http_code} 'http://scorpio:9090/scorpio/v1/info/'` -eq 000 ]
+	while [ `docker run --network fiware_default --rm curlimages/curl -s -o /dev/null -w %{http_code} 'http://scorpio:9090/scorpio/v1/info/'` -eq 000 ]
 	do 
 	  echo -e "Context Broker HTTP state: " `curl -s -o /dev/null -w %{http_code} 'http://localhost:9090/scorpio/v1/info/'` " (waiting for 500)"
 	  sleep 30
 	done
 	echo -e "\n⏳ Waiting for all \033[1;34mScorpio\033[0m services to be fully available\n"
-	while [ `docker run --network fiware_default --rm appropriate/curl -s -o /dev/null -w %{http_code} 'http://scorpio:9090/scorpio/v1/info/'` -eq 500 ]
+	while [ `docker run --network fiware_default --rm curlimages/curl -s -o /dev/null -w %{http_code} 'http://scorpio:9090/scorpio/v1/info/'` -eq 500 ]
 	do 
 	  echo -e "Context Broker HTTP state: " `curl -s -o /dev/null -w %{http_code} 'http://localhost:9090/scorpio/v1/info/'` " (waiting for 200)"
 	  sleep 30
@@ -39,7 +39,7 @@ waitForScorpio () {
 
 waitForIoTAgent () {
 	echo -e "\n⏳ Waiting for \033[1;36mIoT-Agent\033[0m to be available\n"
-	while [ `docker run --network fiware_default --rm appropriate/curl -s -o /dev/null -w %{http_code} 'http://iot-agent:4041/version'` -eq 000 ]
+	while [ `docker run --network fiware_default --rm curlimages/curl -s -o /dev/null -w %{http_code} 'http://iot-agent:4041/version'` -eq 000 ]
 	do 
 	  echo -e "IoT Agent HTTP state: " `curl -s -o /dev/null -w %{http_code} 'http://localhost:4041/version'` " (waiting for 200)"
 	  sleep 1
@@ -47,11 +47,16 @@ waitForIoTAgent () {
 }
 
 loadData () {
-	export TUTORIAL_DATA_MODELS_CONTEXT="https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld" 
 	echo ""
-	./import-data
+	docker run --rm -v $(pwd)/import-data:/import-data \
+		--network fiware_default \
+		-e CONTEXT_BROKER=orion:1026 \
+		-e TUTORIAL_DATA_MODELS_CONTEXT="https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld" \
+		--entrypoint /bin/ash curlimages/curl import-data
 	waitForIoTAgent
-	./provision-devices
+	docker run --rm -v $(pwd)/provision-devices:/provision-devices \
+		--network fiware_default \
+		--entrypoint /bin/ash curlimages/curl provision-devices
 	echo ""
 }
 
