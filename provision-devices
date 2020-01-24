@@ -137,7 +137,7 @@ curl -s -o /dev/null -X POST \
  "devices": [
    {
      "device_id":   "motion001",
-     "entity_name": "Motion:001",
+     "entity_name": "urn:ngsi-ld:Motion:001",
      "entity_type": "Motion",
      "static_attributes": [
          {"name": "controlledAsset", "type": "Relationship","value": "urn:ngsi-ld:Building:store001"}
@@ -145,7 +145,7 @@ curl -s -o /dev/null -X POST \
    },
    {
       "device_id": "bell001",
-      "entity_name": "Bell:001",
+      "entity_name": "urn:ngsi-ld:Bell:001",
       "entity_type": "Bell",
       "endpoint": "http://iot-sensors:3001/iot/bell001",
       "static_attributes": [
@@ -154,7 +154,7 @@ curl -s -o /dev/null -X POST \
     },
     {
       "device_id": "door001",
-      "entity_name": "Door:001",
+      "entity_name": "urn:ngsi-ld:Door:001",
       "entity_type": "Door",
       "endpoint": "http://iot-sensors:3001/iot/door001",
       "static_attributes": [
@@ -163,10 +163,10 @@ curl -s -o /dev/null -X POST \
     }, 
     {
       "device_id": "lamp001",
-      "entity_name": "Lamp:001",
+      "entity_name": "urn:ngsi-ld:Lamp:001",
       "entity_type": "Lamp",
       "endpoint": "http://iot-sensors:3001/iot/lamp001",
-       "static_attributes": [
+      "static_attributes": [
           {"name": "controlledAsset", "type": "Relationship","value": "urn:ngsi-ld:Building:store001"}
       ]
     }
@@ -189,7 +189,7 @@ curl -s -o /dev/null -X POST \
  "devices": [
    {
      "device_id":   "motion002",
-     "entity_name": "Motion:002",
+     "entity_name": "urn:ngsi-ld:Motion:002",
      "entity_type": "Motion",
      "static_attributes": [
         {"name": "controlledAsset", "type": "Relationship","value": "urn:ngsi-ld:Building:store002"}
@@ -197,7 +197,7 @@ curl -s -o /dev/null -X POST \
    },
    {
       "device_id": "bell002",
-      "entity_name": "Bell:002",
+      "entity_name": "urn:ngsi-ld:Bell:002",
       "entity_type": "Bell",
       "endpoint": "http://iot-sensors:3001/iot/bell002",
       "static_attributes": [
@@ -206,7 +206,7 @@ curl -s -o /dev/null -X POST \
     },
     {
       "device_id": "door002",
-      "entity_name": "Door:002",
+      "entity_name": "urn:ngsi-ld:Door:002",
       "entity_type": "Door",
       "endpoint": "http://iot-sensors:3001/iot/door002",
       "static_attributes": [
@@ -215,7 +215,7 @@ curl -s -o /dev/null -X POST \
     },
     {
       "device_id": "lamp002",
-      "entity_name": "Lamp:002",
+      "entity_name": "urn:ngsi-ld:Lamp:002",
       "entity_type": "Lamp",
       "endpoint": "http://iot-sensors:3001/iot/lamp002",
       "static_attributes": [
@@ -245,7 +245,7 @@ curl -s -o /dev/null -X POST \
  "devices": [
    {
      "device_id":   "motion003",
-     "entity_name": "Motion:003",
+     "entity_name": "urn:ngsi-ld:Motion:003",
      "entity_type": "Motion",
      "static_attributes": [
         {"name": "controlledAsset", "type": "Relationship","value": "urn:ngsi-ld:Building:store003"}
@@ -253,7 +253,7 @@ curl -s -o /dev/null -X POST \
    },
    {
       "device_id": "bell003",
-      "entity_name": "Bell:003",
+      "entity_name": "urn:ngsi-ld:Bell:003",
       "entity_type": "Bell",
       "endpoint": "http://iot-sensors:3001/iot/bell003",
       "static_attributes": [
@@ -262,7 +262,7 @@ curl -s -o /dev/null -X POST \
     },
     {
       "device_id": "door003",
-      "entity_name": "Door:003",
+      "entity_name": "urn:ngsi-ld:Door:003",
       "entity_type": "Door",
       "endpoint": "http://iot-sensors:3001/iot/door003",
       "static_attributes": [
@@ -271,7 +271,7 @@ curl -s -o /dev/null -X POST \
     },
     {
       "device_id": "lamp003",
-      "entity_name": "Lamp:003",
+      "entity_name": "urn:ngsi-ld:Lamp:003",
       "entity_type": "Lamp",
       "endpoint": "http://iot-sensors:3001/iot/lamp003",
       "static_attributes": [
@@ -300,7 +300,7 @@ curl -s -o /dev/null -X POST \
  "devices": [
    {
      "device_id":   "motion004",
-     "entity_name": "Motion:004",
+     "entity_name": "urn:ngsi-ld:Motion:004",
      "entity_type": "Motion",
      "static_attributes": [
         {"name": "controlledAsset", "type": "Relationship","value": "urn:ngsi-ld:Building:store004"}
@@ -308,7 +308,7 @@ curl -s -o /dev/null -X POST \
    },
    {
       "device_id": "bell004",
-      "entity_name": "Bell:004",
+      "entity_name": "urn:ngsi-ld:Bell:004",
       "entity_type": "Bell",
       "endpoint": "http://iot-sensors:3001/iot/bell004",
       "static_attributes": [
@@ -317,7 +317,7 @@ curl -s -o /dev/null -X POST \
     },
     {
       "device_id": "door004",
-      "entity_name": "Door:004",
+      "entity_name": "urn:ngsi-ld:Door:004",
       "entity_type": "Door",
       "endpoint": "http://iot-sensors:3001/iot/door004",
       "static_attributes": [
@@ -326,7 +326,7 @@ curl -s -o /dev/null -X POST \
     },
     {
       "device_id": "lamp004",
-      "entity_name": "Lamp:004",
+      "entity_name": "urn:ngsi-ld:Lamp:004",
       "entity_type": "Lamp",
       "endpoint": "http://iot-sensors:3001/iot/lamp004",
       "static_attributes": [
