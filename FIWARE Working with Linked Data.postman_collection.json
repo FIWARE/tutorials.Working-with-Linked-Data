@@ -1,0 +1,647 @@
+{
+	"info": {
+		"_postman_id": "0bffb109-7af9-4ce3-b269-a53cb1e5c8e8",
+		"name": "FIWARE Working with Linked Data",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Navigating Linked Data Structures",
+			"item": [],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Converting NGSI v2 to NGSI-LD",
+			"item": [
+				{
+					"name": "Copy NGSI v2 Data as NGSI-LD",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "fiware-service",
+								"value": "openiot",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"description\": \"One-off Subscription to copy Device Entities\",\n  \"subject\": {\n    \"entities\": [\n      {\n        \"idPattern\": \".*\"\n      }\n    ]\n  },\n  \"notification\": {\n    \"http\": {\n      \"url\": \"http://tutorial:3000/device/subscription/initialize\"\n    }\n  },\n  \"expires\": \"2017-01-01T14:00:00.00Z\"\n}"
+						},
+						"url": {
+							"raw": "http://{{device-edge}}/v2/subscriptions/",
+							"protocol": "http",
+							"host": [
+								"{{device-edge}}"
+							],
+							"path": [
+								"v2",
+								"subscriptions",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Set up Lamp subscription",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "fiware-service",
+								"value": "openiot",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"description\": \"Notify Subscription Listener of Lamp context changes\",\n  \"subject\": {\n    \"entities\": [\n      {\n        \"idPattern\": \"Lamp.*\"\n      }\n    ],\n    \"condition\": {\n      \"attrs\": [\"luminosity\"]\n    }\n  },\n  \"notification\": {\n    \"http\": {\n      \"url\": \"http://tutorial:3000/device/subscription/luminosity\"\n    },\n    \"attrs\": [\"luminosity\", \"controlledAsset\", \"supportedUnits\"]\n  },\n  \"throttling\": 5\n}"
+						},
+						"url": {
+							"raw": "http://{{device-edge}}/v2/subscriptions/",
+							"protocol": "http",
+							"host": [
+								"{{device-edge}}"
+							],
+							"path": [
+								"v2",
+								"subscriptions",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Set up Motion subscription",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "fiware-service",
+								"type": "text",
+								"value": "openiot"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"description\": \"Notify Subscription Listener of Motion context changes\",\n  \"subject\": {\n    \"entities\": [\n      {\n        \"idPattern\": \"urn:ngsi-ld:Motion.*\"\n      }\n    ],\n    \"condition\": {\n      \"attrs\": [ \"count\" ]\n    }\n  },\n  \"notification\": {\n    \"http\": {\n      \"url\": \"http://tutorial:3000/subscription/count\"\n    },\n    \"attrs\": [\"count\", \"refStore\", \"supportedUnits\" ]\n  }\n}"
+						},
+						"url": {
+							"raw": "http://{{device-edge}}/v2/subscriptions/",
+							"protocol": "http",
+							"host": [
+								"{{device-edge}}"
+							],
+							"path": [
+								"v2",
+								"subscriptions",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read subscriptions",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "fiware-service",
+								"value": "openiot",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{device-edge}}/v2/subscriptions/",
+							"protocol": "http",
+							"host": [
+								"{{device-edge}}"
+							],
+							"path": [
+								"v2",
+								"subscriptions",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read from Lamp",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Link",
+								"value": "<{{datamodels-context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{orion}}/ngsi-ld/v1/entities/urn:ngsi-ld:Lamp:001",
+							"protocol": "http",
+							"host": [
+								"{{orion}}"
+							],
+							"path": [
+								"ngsi-ld",
+								"v1",
+								"entities",
+								"urn:ngsi-ld:Lamp:001"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read from Motion Sensor Copy",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Link",
+								"value": "<{{datamodels-context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{orion}}/ngsi-ld/v1/entities/urn:ngsi-ld:Motion:004",
+							"protocol": "http",
+							"host": [
+								"{{orion}}"
+							],
+							"path": [
+								"ngsi-ld",
+								"v1",
+								"entities",
+								"urn:ngsi-ld:Motion:004"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read from Store 1",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Link",
+								"value": "<{{datamodels-context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{orion}}/ngsi-ld/v1/entities/urn:ngsi-ld:Building:store001?",
+							"protocol": "http",
+							"host": [
+								"{{orion}}"
+							],
+							"path": [
+								"ngsi-ld",
+								"v1",
+								"entities",
+								"urn:ngsi-ld:Building:store001"
+							],
+							"query": [
+								{
+									"key": "options",
+									"value": "keyValues",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Using Subscriptions with NGSI-LD",
+			"item": [
+				{
+					"name": "Create a Subscription ( Store 1) - Low Stock",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/ld+json",
+								"type": "text",
+								"name": "Accept"
+							},
+							{
+								"key": "Link",
+								"value": "<{{datamodels-context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Accept",
+								"value": "application/ld+json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"description\": \"Notify me of low stock in Store 001\",\n\t\"type\": \"Subscription\",\n\t\"entities\": [{\"type\": \"Shelf\"}],\n\t\"watchedAttributes\": [\"numberOfItems\"],\n\t\"q\": \"numberOfItems<10;locatedIn==urn:ngsi-ld:Store:001\",\n\t\"notification\": {\n\t\t\"attributes\": [\"numberOfItems\", \"stocks\", \"locatedIn\"],\n\t\t\"format\": \"keyValues\",\n\t\t\"endpoint\": {\n\t\t\t\"uri\": \"http://tutorial:3000/subscription/low-stock-store001\",\n\t\t\t\"accept\": \"application/json\"\n\t\t}\n\t},\n   \"@context\": \"https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld\"\n}\n        "
+						},
+						"url": {
+							"raw": "http://{{orion}}/ngsi-ld/v1/subscriptions/?",
+							"protocol": "http",
+							"host": [
+								"{{orion}}"
+							],
+							"path": [
+								"ngsi-ld",
+								"v1",
+								"subscriptions",
+								""
+							],
+							"query": [
+								{
+									"key": "options",
+									"value": "keyValues",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a Subscription ( Store 2) - Low Stock",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Link",
+								"type": "text",
+								"value": "<{{datamodels-context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+								"disabled": true
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"description\": \"Notify me of low stock in Store 002\",\n\t\"type\": \"Subscription\",\n\t\"entities\": [{\"type\": \"Shelf\"}],\n\t\"watchedAttributes\": [\"numberOfItems\"],\n\t\"q\": \"numberOfItems<10;locatedIn==urn:ngsi-ld:Store:002\",\n\t\"notification\": {\n\t\t\"attributes\": [\"numberOfItems\", \"stocks\", \"locatedIn\"],\n\t\t\"format\": \"keyValues\",\n\t\t\"endpoint\": {\n\t\t\t\"uri\": \"http://tutorial:3000/subscription/low-stock-store002\",\n\t\t\t\"accept\": \"application/json\"\n\t\t}\n\t},\n   \"@context\": \"https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld\"\n}\n        "
+						},
+						"url": {
+							"raw": "http://{{orion}}/ngsi-ld/v1/subscriptions/?",
+							"protocol": "http",
+							"host": [
+								"{{orion}}"
+							],
+							"path": [
+								"ngsi-ld",
+								"v1",
+								"subscriptions",
+								""
+							],
+							"query": [
+								{
+									"key": "options",
+									"value": "keyValues",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create a Subscription ( Store 2) - Low Stock Copy",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Accept",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Link",
+								"type": "text",
+								"value": "<{{datamodels-context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+								"disabled": true
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://{{orion}}/ngsi-ld/v1/subscriptions/?",
+							"protocol": "http",
+							"host": [
+								"{{orion}}"
+							],
+							"path": [
+								"ngsi-ld",
+								"v1",
+								"subscriptions",
+								""
+							],
+							"query": [
+								{
+									"key": "options",
+									"value": "keyValues",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Using Registrations with NGSI-LD",
+			"item": [
+				{
+					"name": "Create a registration",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/ld+json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\n    \"type\": \"ContextSourceRegistration\",\n    \"information\": [\n        {\n            \"entities\": [\n                {\n                    \"type\": \"Building\",\n                    \"id\": \"urn:ngsi-ld:Building:store001\"\n                }\n            ],\n            \"properties\": [\n                \"tweets\"\n            ],\n            \"relationships\": []\n        }\n    ],\n    \"endpoint\": \"http://context-provider:3000/catfacts/tweets\",\n    \"@context\": \"https://schema.lab.fiware.org/ld/context\"\n}"
+						},
+						"url": {
+							"raw": "http://{{orion}}/ngsi-ld/v1/csourceRegistrations/",
+							"protocol": "http",
+							"host": [
+								"{{orion}}"
+							],
+							"path": [
+								"ngsi-ld",
+								"v1",
+								"csourceRegistrations",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check the registration",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/ld+json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{orion}}/ngsi-ld/v1/csourceRegistrations/",
+							"protocol": "http",
+							"host": [
+								"{{orion}}"
+							],
+							"path": [
+								"ngsi-ld",
+								"v1",
+								"csourceRegistrations",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read from Store 1",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Link",
+								"value": "<{{datamodels-context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{orion}}/ngsi-ld/v1/entities/urn:ngsi-ld:Building:store001?",
+							"protocol": "http",
+							"host": [
+								"{{orion}}"
+							],
+							"path": [
+								"ngsi-ld",
+								"v1",
+								"entities",
+								"urn:ngsi-ld:Building:store001"
+							],
+							"query": [
+								{
+									"key": "options",
+									"value": "keyValues",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read direct from Context Provider",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Link",
+								"value": "<{{datamodels-context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/ld+json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{context-provider}}/static/tweets/ngsi-ld/v1/entities/urn:ngsi-ld:Building:store001?",
+							"protocol": "http",
+							"host": [
+								"{{context-provider}}"
+							],
+							"path": [
+								"static",
+								"tweets",
+								"ngsi-ld",
+								"v1",
+								"entities",
+								"urn:ngsi-ld:Building:store001"
+							],
+							"query": [
+								{
+									"key": "options",
+									"value": "keyValues",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Forwarded Update to Conext Provider",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Link",
+								"value": "<{{datamodels-context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"name": "Accept"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"tweets\": { \"type\": \"Property\", \"value\": [\"count\"] } }"
+						},
+						"url": {
+							"raw": "http://{{context-provider}}/static/tweets/ngsi-ld/v1/entities/urn:ngsi-ld:Building:store001/attrs?",
+							"protocol": "http",
+							"host": [
+								"{{context-provider}}"
+							],
+							"path": [
+								"static",
+								"tweets",
+								"ngsi-ld",
+								"v1",
+								"entities",
+								"urn:ngsi-ld:Building:store001",
+								"attrs"
+							],
+							"query": [
+								{
+									"key": "options",
+									"value": "keyValues",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "91cf54e0-d9c1-41af-81a4-50f33ee8fc8e",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "57f4bec4-173f-4e09-9032-08844d2c08be",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "f0aab115-a720-4b74-a39f-3ebb4eda159d",
+			"key": "orion",
+			"value": "localhost:1026",
+			"type": "string"
+		},
+		{
+			"id": "ca3ab1c7-afc9-4425-b568-b7e2cc5e0b64",
+			"key": "datamodels-context.jsonld",
+			"value": "https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld",
+			"type": "string"
+		},
+		{
+			"id": "f73e6af1-9d38-4db4-9f60-63e3b134d6dc",
+			"key": "device-edge",
+			"value": "localhost:1027",
+			"type": "string"
+		},
+		{
+			"id": "40dc1f09-73ef-455f-81bb-2e1725639c24",
+			"key": "context-provider",
+			"value": "localhost:3000",
+			"type": "string"
+		}
+	],
+	"protocolProfileBehavior": {}
+}

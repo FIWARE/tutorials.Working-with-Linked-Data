@@ -20,7 +20,8 @@ version: "3.5"
 services:
   # Orion LD is the context broker
   orion:
-    image: fiware/orion-ld:${ORION_LD_VERSION}
+#    image: fiware/orion-ld:${ORION_LD_VERSION}
+    image: fiware/orion-ld
     hostname: orion
     container_name: fiware-orion-ld
     depends_on:
