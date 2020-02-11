@@ -7,7 +7,7 @@
 <br/> [![Documentation](https://img.shields.io/readthedocs/fiware-tutorials.svg)](https://fiware-tutorials.rtfd.io)
 
 This tutorial teaches FIWARE users how to architect and design a system based on **linked data** and to alter linked
-data context programmatically. The tutorial ex thetends knowledge gained from the equivalent
+data context programmatically. The tutorial extends the knowledge gained from the equivalent
 [NGSI-v2 tutorial](https://github.com/FIWARE/tutorials.Accessing-Context/) and enables a user understand how to write
 code in an [NGSI-LD](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.01.01_60/gs_CIM009v010101p.pdf) capable
 [Node.js](https://nodejs.org/) [Express](https://expressjs.com/) application in order to retrieve and alter context
@@ -17,7 +17,7 @@ The tutorial is mainly concerned with discussing code written in Node.js, howeve
 making [cUrl](https://ec.haxx.se/) commands.
 [Postman documentation](https://fiware.github.io/tutorials.Accessing-Context/) for the same commands is also available.
 
-[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/7ae2d2d3f42bbdf59c45)
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/644a1df1e2d226da65ef)
 
 ## Contents
 
@@ -32,7 +32,7 @@ making [cUrl](https://ec.haxx.se/) commands.
     -   [Cygwin](#cygwin)
 -   [Architecture](#architecture)
 -   [Start Up](#start-up)
--   [Accessing Linked Data Programatically](#accessing-linked-data-programatically)
+-   [Traversing Linked Data Programmatically](#traversing-linked-data-programatically)
     -   [Reading Linked Data](#reading-linked-data)
         -   [Initializing the library](#initializing-the-library)
         -   [Retrieve a known Store](#retrieve-a-known-store)
@@ -79,11 +79,7 @@ Three basic data access scenarios for the supermaket are defined below:
     -   Raise an alert in the warehouse if less than 10 objects remain on sale
     -   etc.
 
-Two further advanced scenarios will also be covered within this tutorial
-
--   Augmenting NGSI-LD Data - e.g. Enhance an exisiting data entity by adding additional _Property_ attributes coming
-    from an external source
--   Transitioning Data from NGSI v2 to NGSI-LD - e.g. how to read from an NGSI v2 source and create linked data from it.
+Further advanced scenarios will be covered in later tutorials
 
 ## Linked Data Entities within a stock management system
 
@@ -95,11 +91,24 @@ will be loaded into the context broker. The existing relationships between the e
 The **Building**, **Product**, **Shelf** and **StockOrder** entities will be used to display data on the frontend of our
 demo application.
 
+## The teaching goal of this tutorial
+
+The aim of this tutorial is to improve developer understanding of programmatic access of context data through defining
+and discussing a series of generic code examples covering common data access scenarios. For this purpose a simple
+Node.js Express application will be created.
+
+The intention here is not to teach users how to write an application in Express - indeed any language could have been
+chosen. It is merely to show how **any** sample programming language could be used alter the context to achieve the
+business logic goals.
+
+Obviously, your choice of programming language will depend upon your own business needs - when reading the code below
+please keep this in mind and substitute Node.js with your own programming language as appropriate.
+
 # Stock Management Frontend
 
-All the code Node.js Express for the demo can be found within the `ngsi-ld` folder within the GitHub
-repository.[Stock Management example](https://github.com/FIWARE/tutorials.Step-by-Step/tree/master/context-provider).
-The application runs on the following URLs:
+All the code Node.js Express for the demo can be found within the `ngsi-ld` folder within the GitHub repository.
+[Stock Management example](https://github.com/FIWARE/tutorials.Step-by-Step/tree/master/context-provider). The
+application runs on the following URLs:
 
 -   `http://localhost:3000/app/store/urn:ngsi-ld:Building:store001`
 -   `http://localhost:3000/app/store/urn:ngsi-ld:Building:store002`
@@ -144,20 +153,13 @@ Currently, the Orion Context Broker relies on open source [MongoDB](https://www.
 persistence of the context data it holds. To request context data from external sources, a simple Context Provider NGSI
 proxy has also been added. To visualize and interact with the Context we will add a simple Express application
 
-Therefore, the architecture will consist of four elements:
+Therefore, the architecture will consist of three elements:
 
 -   The [Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/) which will receive requests using
     [NGSI](https://fiware.github.io/specifications/OpenAPI/ngsiv2)
 -   The underlying [MongoDB](https://www.mongodb.com/) database :
     -   Used by the Orion Context Broker to hold context data information such as data entities, subscriptions and
         registrations
--   The **Context Provider NGSI** proxy which will:
-    -   receive requests using
-        [NGSI-LD](https://forge.etsi.org/swagger/ui/?url=https://forge.etsi.org/gitlab/NGSI-LD/NGSI-LD/raw/master/spec/updated/full_api.json#/)
-    -   makes requests to publicly available data sources using their own APIs in a proprietary format
-    -   returns context data back to the Orion Context Broker in
-        [NGSI-LD](https://forge.etsi.org/swagger/ui/?url=https://forge.etsi.org/gitlab/NGSI-LD/NGSI-LD/raw/master/spec/updated/full_api.json#/)
-        format.
 -   The **Stock Management Frontend** which will:
     -   Display store information
     -   Show which products can be bought at each store
@@ -224,9 +226,10 @@ cd tutorials.Working-with-Linked-Data
 
 ---
 
-# Accessing Linked Data Programatically
+# Traversing Linked Data Programmatically
 
-Goto `http://localhost:3000/app/store/urn:ngsi-ld:Building:store001` to display and interact with the Supermarket data.
+Goto `http://localhost:3000/app/store/urn:ngsi-ld:Building:store001` to display and interact with the working
+Supermarket data application.
 
 ## Reading Linked Data
 
@@ -261,14 +264,18 @@ async function displayStore(req, res) {
         { options: "keyValues" },
         ngsiLD.setHeaders(req.session.access_token, LinkHeader)
     );
+
+    return res.render("store", { title: store.name, store });
 }
 ```
 
-The function above also sends some Headers as part of the request.
+The function above also sends some standard HTTP Headers as part of the request - these are defined in the
+`setHeaders()` function.
 
-The default headers would usually be the `Link` header to send the JSON-LD context and the `Content-Type` to identify
-the request as JSON-LD (note that every NGSI-LD as a subset of JSON-LD). Other headers such as `X-Auth-Token` can be
-added to add OAuth2 security.
+Within an NGSI-LD-based system, the usual default HTTP headers would include a `Link` header to send the JSON-LD context
+and a `Content-Type` header to identify the request as `application/ld+json` (note that every NGSI-LD request is valid
+JSON_LD since NGSI-LD is a subset of JSON-LD). Other additional headers such as `X-Auth-Token` can be added to enable
+OAuth2 security.
 
 ```javascript
 function setHeaders(accessToken, link, contentType) {
@@ -287,7 +294,7 @@ function setHeaders(accessToken, link, contentType) {
 ```
 
 Within the `lib/ngsi-ld.js` library file, the `BASE_PATH` defines the location of the Orion Context Broker, reading a
-data entity is simply a wrapper around an HTTP GET request passing the appropriate headers
+data entity is simply a wrapper around an asynchronous HTTP GET request passing the appropriate headers
 
 ```javascript
 const BASE_PATH = process.env.CONTEXT_BROKER || "http://localhost:1026/ngsi-ld/v1";
@@ -318,23 +325,26 @@ curl -G -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Building:s
 To display information at the till, it is necessary to discover information about the products found within a Store.
 From the Data Entity diagram we can ascertain that:
 
--   Buildings hold Shelf information using the `furniture` _Relationship_
--   Shelves hold Product information using the `stocks` _Relationship_
--   Products hold `name` and `price` as _Property_ attributes
+-   **Building** entities hold related **Shelf** information within the `furniture` _Relationship_
+-   **Shelf** entities hold related **Product** information within the `stocks` _Relationship_
+-   Products hold `name` and `price` as _Property_ attributes of the **Product** entity itself.
 
 Therefore the code for the `displayTillInfo()` method will consist of the following steps.
 
 1. Make a request to the Context Broker to _find shelves within a known store_
-2. Reduce the result to a `q` parameter and make a second request to the Context Broker to _retrieve stocked products
+2. Reduce the result to a `id` parameter and make a second request to the Context Broker to _retrieve stocked products
    from shelves_
-3. Reduce the result to a `q` parameter and make a third request to the Context Broker to _retrieve product details for
+3. Reduce the result to a `id` parameter and make a third request to the Context Broker to _retrieve product details for
    selected shelves_
 
 To users familar with database joins, it may seem strange being forced to making a series of requests like this, however
-it is necessary due to scalability issues/concerns in a large distributed setup, so direct join requests are not
-possible with NGSI-LD.
+it is necessary due to scalability issues/concerns in a large distributed setup. Direct join requests are not possible
+with NGSI-LD.
 
 ### Find Shelves within a known Store
+
+To access the `furniture` attribute of a known **Building** entity, a `keyValues` request is made using the `attrs`
+parameter.
 
 ```javascript
 const building = await ngsiLD.readEntity(
@@ -359,7 +369,12 @@ curl -G -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Building:s
 -d 'attrs=furniture' \
 ```
 
+The response is a JSON Object which includes a `furniture` attribute which can be manipulated further.
+
 ### Retrieve Stocked Products from shelves
+
+To retrieve a series of **Shelf** entities, the `ngsiLD.listEntities()` function is called and filtered using the `id`
+parameter. The `id` is just a comma separated list taken from the request above.
 
 ```javascript
 let productsList = await ngsiLD.listEntities(
@@ -371,6 +386,20 @@ let productsList = await ngsiLD.listEntities(
     },
     ngsiLD.setHeaders(req.session.access_token, LinkHeader)
 );
+```
+
+`listEntities()` is another function within the `lib/ngsi-ld.js` library file
+
+```javascript
+function listEntities(opts, headers = {}) {
+    return request({
+        qs: opts,
+        url: BASE_PATH + "/entities",
+        method: "GET",
+        headers,
+        json: true
+    });
+}
 ```
 
 The equivalent cUrl statement can be seen below:
@@ -386,6 +415,9 @@ curl -G -X GET 'http://localhost:1026/ngsi-ld/v1/entities/' \
 -d 'id=urn:ngsi-ld:Shelf:unit001,urn:ngsi-ld:Shelf:unit002,urn:ngsi-ld:Shelf:unit003'
 ```
 
+The response is a JSON Array of **Shelf** entities which includes as `stocks` attribute which can be manipulated
+further. The code below extracts the ids for later use.
+
 ```javascript
 const stockedProducts = [];
 
@@ -399,6 +431,9 @@ _.forEach(productsList, (value, key) => {
 
 ### Retrieve Product Details for selected shelves
 
+To retrieve a series of **Product** entities, the `ngsiLD.listEntities()` function is once again called and filtered
+using the `id` parameter. The `id` is just a comma separated list taken from the request above.
+
 ```javascript
 let productsInStore = await ngsiLD.listEntities(
     {
@@ -411,6 +446,8 @@ let productsInStore = await ngsiLD.listEntities(
 );
 ```
 
+The equivalent cUrl statement can be seen below:
+
 ```console
 curl -G -X GET 'http://localhost:1026/ngsi-ld/v1/entities/' \
 -H 'Link: <https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
@@ -422,9 +459,16 @@ curl -G -X GET 'http://localhost:1026/ngsi-ld/v1/entities/' \
 -d 'id=urn:ngsi-ld:Product:001,urn:ngsi-ld:Product:003,urn:ngsi-ld:Product:004'
 ```
 
+The response is a JSON Array of **Product** entities which are then displayed on screen.
+
 ## Updating Linked Data
 
 ### Find a shelf stocking a product
+
+To retrieve a series of **Shelf** entities, the `ngsiLD.listEntities()` function is called. It is important to retrieve
+the current context before amending it, so the `q` parameter is used to only retrieve a shelf from the correct store
+containing the correct product. This request is only possible because the **Shelf** data model has been designed to hold
+_relationships_ with both **Building** and **Product**.
 
 ```javascript
 const shelf = await ngsiLD.listEntities(
@@ -439,15 +483,52 @@ const shelf = await ngsiLD.listEntities(
 );
 ```
 
+The equivalent cUrl statement can be seen below:
+
+```console
+curl -G -X GET 'http://localhost:1026/ngsi-ld/v1/entities/' \
+-H 'Link: <https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
+-H 'Content-Type: application/ld+json' \
+-H 'Accept: application/json' \
+-d 'type=Shelf' \
+-d 'options=keyValues' \
+-d 'q=numberOfItems%3E0;locatedIn==%22urn:ngsi-ld:Building:store001%22;stocks==%22urn:ngsi-ld:Product:001%22'
+```
+
 ### Update the state of a shelf
+
+To update an entity a PATCH request is made using the id of the **Shelf** returned in the previous request
 
 ```javascript
 const count = shelf[0].numberOfItems - 1;
+await ngsiLD.updateAttribute(
+    shelf[0].id,
+    { numberOfItems: { type: "Property", value: count } },
+    ngsiLD.setHeaders(req.session.access_token, LinkHeader)
+);
+```
 
-monitor("NGSI", "updateAttribute " + shelf[0].id, {
-    numberOfItems: { type: "Property", value: count }
-});
-await ngsiLD.updateAttribute(shelf[0].id, { numberOfItems: { type: "Property", value: count } }, headers);
+The asynchronous PATCH request is found in the `updateAttribute()` function within the `lib/ngsi-ld.js` library file
+
+```javascript
+function updateAttribute(entityId, body, headers = {}) {
+    return request({
+        url: BASE_PATH + "/entities/" + entityId + "/attrs",
+        method: "PATCH",
+        body,
+        headers,
+        json: true
+    });
+}
+```
+
+The equivalent cUrl statement can be seen below:
+
+```console
+curl -X PATCH 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Shelf:unit001/attrs' \
+-H 'Link: <https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
+-H 'Content-Type: application/json' \
+-d '{ "numberOfItems": { "type": "Property", "value": 10 } }'
 ```
 
 ---
