@@ -6,846 +6,205 @@
 	},
 	"item": [
 		{
-			"name": "Navigating Linked Data Structures",
-			"item": [
-				{
-					"name": "Retrieve a known Store",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Link",
-								"value": "<{{datamodels-context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
-								"type": "text"
-							},
-							{
-								"key": "Content-Type",
-								"value": "application/ld+json",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "http://{{orion}}/ngsi-ld/v1/entities/urn:ngsi-ld:Building:store001/?type=Building&options=keyValues",
-							"protocol": "http",
-							"host": [
-								"{{orion}}"
-							],
-							"path": [
-								"ngsi-ld",
-								"v1",
-								"entities",
-								"urn:ngsi-ld:Building:store001",
-								""
-							],
-							"query": [
-								{
-									"key": "type",
-									"value": "Building"
-								},
-								{
-									"key": "options",
-									"value": "keyValues"
-								}
-							]
-						}
+			"name": "Retrieve a known Store",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Link",
+						"value": "<{{datamodels-context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+						"type": "text"
 					},
-					"response": []
-				},
-				{
-					"name": "Find Shelves within a known Store",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Link",
-								"value": "<{{datamodels-context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
-								"type": "text"
-							},
-							{
-								"key": "Content-Type",
-								"value": "application/ld+json",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "http://{{orion}}/ngsi-ld/v1/entities/urn:ngsi-ld:Building:store001/?type=Building&options=keyValues&attrs=furniture",
-							"protocol": "http",
-							"host": [
-								"{{orion}}"
-							],
-							"path": [
-								"ngsi-ld",
-								"v1",
-								"entities",
-								"urn:ngsi-ld:Building:store001",
-								""
-							],
-							"query": [
-								{
-									"key": "type",
-									"value": "Building"
-								},
-								{
-									"key": "options",
-									"value": "keyValues"
-								},
-								{
-									"key": "attrs",
-									"value": "furniture"
-								}
-							]
+					{
+						"key": "Content-Type",
+						"value": "application/ld+json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{orion}}/ngsi-ld/v1/entities/urn:ngsi-ld:Building:store001/?type=Building&options=keyValues",
+					"protocol": "http",
+					"host": [
+						"{{orion}}"
+					],
+					"path": [
+						"ngsi-ld",
+						"v1",
+						"entities",
+						"urn:ngsi-ld:Building:store001",
+						""
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "Building"
+						},
+						{
+							"key": "options",
+							"value": "keyValues"
 						}
-					},
-					"response": []
-				},
-				{
-					"name": "Retrieve Stocked Products from Shelves",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Link",
-								"value": "<{{datamodels-context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
-								"type": "text"
-							},
-							{
-								"key": "Content-Type",
-								"value": "application/ld+json",
-								"type": "text"
-							},
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "http://{{orion}}/ngsi-ld/v1/entities/?type=Shelf&options=keyValues&attrs=stocks,numberOfItems&id=urn:ngsi-ld:Shelf:unit001,urn:ngsi-ld:Shelf:unit002,urn:ngsi-ld:Shelf:unit003",
-							"protocol": "http",
-							"host": [
-								"{{orion}}"
-							],
-							"path": [
-								"ngsi-ld",
-								"v1",
-								"entities",
-								""
-							],
-							"query": [
-								{
-									"key": "type",
-									"value": "Shelf"
-								},
-								{
-									"key": "options",
-									"value": "keyValues"
-								},
-								{
-									"key": "attrs",
-									"value": "stocks,numberOfItems"
-								},
-								{
-									"key": "id",
-									"value": "urn:ngsi-ld:Shelf:unit001,urn:ngsi-ld:Shelf:unit002,urn:ngsi-ld:Shelf:unit003"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Retrieve Products from Shelves Copy",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Link",
-								"value": "<{{datamodels-context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
-								"type": "text"
-							},
-							{
-								"key": "Content-Type",
-								"value": "application/ld+json",
-								"type": "text"
-							},
-							{
-								"key": "Accept",
-								"value": "application/json",
-								"type": "text",
-								"name": "Accept"
-							}
-						],
-						"url": {
-							"raw": "http://{{orion}}/ngsi-ld/v1/entities/?type=Product&options=keyValues&attrs=name,price&id=urn:ngsi-ld:Product:001,urn:ngsi-ld:Product:003,urn:ngsi-ld:Product:004",
-							"protocol": "http",
-							"host": [
-								"{{orion}}"
-							],
-							"path": [
-								"ngsi-ld",
-								"v1",
-								"entities",
-								""
-							],
-							"query": [
-								{
-									"key": "type",
-									"value": "Product"
-								},
-								{
-									"key": "options",
-									"value": "keyValues"
-								},
-								{
-									"key": "attrs",
-									"value": "name,price"
-								},
-								{
-									"key": "id",
-									"value": "urn:ngsi-ld:Product:001,urn:ngsi-ld:Product:003,urn:ngsi-ld:Product:004"
-								}
-							]
-						}
-					},
-					"response": []
+					]
 				}
-			],
-			"protocolProfileBehavior": {}
+			},
+			"response": []
 		},
 		{
-			"name": "Converting NGSI v2 to NGSI-LD",
-			"item": [
-				{
-					"name": "Copy NGSI v2 Data as NGSI-LD",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "fiware-service",
-								"value": "openiot",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"description\": \"One-off Subscription to copy Device Entities\",\n  \"subject\": {\n    \"entities\": [\n      {\n        \"idPattern\": \".*\"\n      }\n    ]\n  },\n  \"notification\": {\n    \"http\": {\n      \"url\": \"http://tutorial:3000/device/subscription/initialize\"\n    }\n  },\n  \"expires\": \"2017-01-01T14:00:00.00Z\"\n}"
+			"name": "Find Shelves within a known Store",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Link",
+						"value": "<{{datamodels-context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/ld+json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{orion}}/ngsi-ld/v1/entities/urn:ngsi-ld:Building:store001/?type=Building&options=keyValues&attrs=furniture",
+					"protocol": "http",
+					"host": [
+						"{{orion}}"
+					],
+					"path": [
+						"ngsi-ld",
+						"v1",
+						"entities",
+						"urn:ngsi-ld:Building:store001",
+						""
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "Building"
 						},
-						"url": {
-							"raw": "http://{{device-edge}}/v2/subscriptions/",
-							"protocol": "http",
-							"host": [
-								"{{device-edge}}"
-							],
-							"path": [
-								"v2",
-								"subscriptions",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Set up Lamp subscription",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "fiware-service",
-								"value": "openiot",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"description\": \"Notify Subscription Listener of Lamp context changes\",\n  \"subject\": {\n    \"entities\": [\n      {\n        \"idPattern\": \"Lamp.*\"\n      }\n    ],\n    \"condition\": {\n      \"attrs\": [\"luminosity\"]\n    }\n  },\n  \"notification\": {\n    \"http\": {\n      \"url\": \"http://tutorial:3000/device/subscription/luminosity\"\n    },\n    \"attrs\": [\"luminosity\", \"controlledAsset\", \"supportedUnits\"]\n  },\n  \"throttling\": 5\n}"
+						{
+							"key": "options",
+							"value": "keyValues"
 						},
-						"url": {
-							"raw": "http://{{device-edge}}/v2/subscriptions/",
-							"protocol": "http",
-							"host": [
-								"{{device-edge}}"
-							],
-							"path": [
-								"v2",
-								"subscriptions",
-								""
-							]
+						{
+							"key": "attrs",
+							"value": "furniture"
 						}
-					},
-					"response": []
-				},
-				{
-					"name": "Set up Motion subscription",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							},
-							{
-								"key": "fiware-service",
-								"type": "text",
-								"value": "openiot"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"description\": \"Notify Subscription Listener of Motion context changes\",\n  \"subject\": {\n    \"entities\": [\n      {\n        \"idPattern\": \"urn:ngsi-ld:Motion.*\"\n      }\n    ],\n    \"condition\": {\n      \"attrs\": [ \"count\" ]\n    }\n  },\n  \"notification\": {\n    \"http\": {\n      \"url\": \"http://tutorial:3000/subscription/count\"\n    },\n    \"attrs\": [\"count\", \"refStore\", \"supportedUnits\" ]\n  }\n}"
-						},
-						"url": {
-							"raw": "http://{{device-edge}}/v2/subscriptions/",
-							"protocol": "http",
-							"host": [
-								"{{device-edge}}"
-							],
-							"path": [
-								"v2",
-								"subscriptions",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Read subscriptions",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text",
-								"disabled": true
-							},
-							{
-								"key": "fiware-service",
-								"value": "openiot",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "http://{{device-edge}}/v2/subscriptions/",
-							"protocol": "http",
-							"host": [
-								"{{device-edge}}"
-							],
-							"path": [
-								"v2",
-								"subscriptions",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Read from Lamp",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Link",
-								"value": "<{{datamodels-context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "http://{{orion}}/ngsi-ld/v1/entities/urn:ngsi-ld:Lamp:001",
-							"protocol": "http",
-							"host": [
-								"{{orion}}"
-							],
-							"path": [
-								"ngsi-ld",
-								"v1",
-								"entities",
-								"urn:ngsi-ld:Lamp:001"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Read from Motion Sensor Copy",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Link",
-								"value": "<{{datamodels-context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "http://{{orion}}/ngsi-ld/v1/entities/urn:ngsi-ld:Motion:004",
-							"protocol": "http",
-							"host": [
-								"{{orion}}"
-							],
-							"path": [
-								"ngsi-ld",
-								"v1",
-								"entities",
-								"urn:ngsi-ld:Motion:004"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Read from Store 1",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Link",
-								"value": "<{{datamodels-context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "http://{{orion}}/ngsi-ld/v1/entities/urn:ngsi-ld:Building:store001?",
-							"protocol": "http",
-							"host": [
-								"{{orion}}"
-							],
-							"path": [
-								"ngsi-ld",
-								"v1",
-								"entities",
-								"urn:ngsi-ld:Building:store001"
-							],
-							"query": [
-								{
-									"key": "options",
-									"value": "keyValues",
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": []
+					]
 				}
-			],
-			"protocolProfileBehavior": {}
+			},
+			"response": []
 		},
 		{
-			"name": "Using Subscriptions with NGSI-LD",
-			"item": [
-				{
-					"name": "Create a Subscription ( Store 1) - Low Stock",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/ld+json",
-								"type": "text",
-								"name": "Accept"
-							},
-							{
-								"key": "Link",
-								"value": "<{{datamodels-context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
-								"type": "text",
-								"disabled": true
-							},
-							{
-								"key": "Accept",
-								"value": "application/ld+json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"description\": \"Notify me of low stock in Store 001\",\n\t\"type\": \"Subscription\",\n\t\"entities\": [{\"type\": \"Shelf\"}],\n\t\"watchedAttributes\": [\"numberOfItems\"],\n\t\"q\": \"numberOfItems<10;locatedIn==urn:ngsi-ld:Store:001\",\n\t\"notification\": {\n\t\t\"attributes\": [\"numberOfItems\", \"stocks\", \"locatedIn\"],\n\t\t\"format\": \"keyValues\",\n\t\t\"endpoint\": {\n\t\t\t\"uri\": \"http://tutorial:3000/subscription/low-stock-store001\",\n\t\t\t\"accept\": \"application/json\"\n\t\t}\n\t},\n   \"@context\": \"https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld\"\n}\n        "
+			"name": "Retrieve Stocked Products from Shelves",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Link",
+						"value": "<{{datamodels-context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/ld+json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://{{orion}}/ngsi-ld/v1/entities/?type=Shelf&options=keyValues&attrs=stocks,numberOfItems&id=urn:ngsi-ld:Shelf:unit001,urn:ngsi-ld:Shelf:unit002,urn:ngsi-ld:Shelf:unit003",
+					"protocol": "http",
+					"host": [
+						"{{orion}}"
+					],
+					"path": [
+						"ngsi-ld",
+						"v1",
+						"entities",
+						""
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "Shelf"
 						},
-						"url": {
-							"raw": "http://{{orion}}/ngsi-ld/v1/subscriptions/?",
-							"protocol": "http",
-							"host": [
-								"{{orion}}"
-							],
-							"path": [
-								"ngsi-ld",
-								"v1",
-								"subscriptions",
-								""
-							],
-							"query": [
-								{
-									"key": "options",
-									"value": "keyValues",
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create a Subscription ( Store 2) - Low Stock",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Accept",
-								"type": "text",
-								"value": "application/json"
-							},
-							{
-								"key": "Link",
-								"type": "text",
-								"value": "<{{datamodels-context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
-								"disabled": true
-							},
-							{
-								"key": "Accept",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"description\": \"Notify me of low stock in Store 002\",\n\t\"type\": \"Subscription\",\n\t\"entities\": [{\"type\": \"Shelf\"}],\n\t\"watchedAttributes\": [\"numberOfItems\"],\n\t\"q\": \"numberOfItems<10;locatedIn==urn:ngsi-ld:Store:002\",\n\t\"notification\": {\n\t\t\"attributes\": [\"numberOfItems\", \"stocks\", \"locatedIn\"],\n\t\t\"format\": \"keyValues\",\n\t\t\"endpoint\": {\n\t\t\t\"uri\": \"http://tutorial:3000/subscription/low-stock-store002\",\n\t\t\t\"accept\": \"application/json\"\n\t\t}\n\t},\n   \"@context\": \"https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld\"\n}\n        "
+						{
+							"key": "options",
+							"value": "keyValues"
 						},
-						"url": {
-							"raw": "http://{{orion}}/ngsi-ld/v1/subscriptions/?",
-							"protocol": "http",
-							"host": [
-								"{{orion}}"
-							],
-							"path": [
-								"ngsi-ld",
-								"v1",
-								"subscriptions",
-								""
-							],
-							"query": [
-								{
-									"key": "options",
-									"value": "keyValues",
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create a Subscription ( Store 2) - Low Stock Copy",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Accept",
-								"type": "text",
-								"value": "application/json"
-							},
-							{
-								"key": "Link",
-								"type": "text",
-								"value": "<{{datamodels-context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
-								"disabled": true
-							},
-							{
-								"key": "Accept",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
+						{
+							"key": "attrs",
+							"value": "stocks,numberOfItems"
 						},
-						"url": {
-							"raw": "http://{{orion}}/ngsi-ld/v1/subscriptions/?",
-							"protocol": "http",
-							"host": [
-								"{{orion}}"
-							],
-							"path": [
-								"ngsi-ld",
-								"v1",
-								"subscriptions",
-								""
-							],
-							"query": [
-								{
-									"key": "options",
-									"value": "keyValues",
-									"disabled": true
-								}
-							]
+						{
+							"key": "id",
+							"value": "urn:ngsi-ld:Shelf:unit001,urn:ngsi-ld:Shelf:unit002,urn:ngsi-ld:Shelf:unit003"
 						}
-					},
-					"response": []
+					]
 				}
-			],
-			"protocolProfileBehavior": {}
+			},
+			"response": []
 		},
 		{
-			"name": "Using Registrations with NGSI-LD",
-			"item": [
-				{
-					"name": "Create a registration",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/ld+json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": " {\n    \"type\": \"ContextSourceRegistration\",\n    \"information\": [\n        {\n            \"entities\": [\n                {\n                    \"type\": \"Building\",\n                    \"id\": \"urn:ngsi-ld:Building:store001\"\n                }\n            ],\n            \"properties\": [\n                \"tweets\"\n            ]\n        }\n    ],\n    \"endpoint\": \"http://context-provider:3000/static/tweets\",\n    \"@context\": \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context.jsonld\"\n}"
+			"name": "Retrieve Products from Shelves",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Link",
+						"value": "<{{datamodels-context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/ld+json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text",
+						"name": "Accept"
+					}
+				],
+				"url": {
+					"raw": "http://{{orion}}/ngsi-ld/v1/entities/?type=Product&options=keyValues&attrs=name,price&id=urn:ngsi-ld:Product:001,urn:ngsi-ld:Product:003,urn:ngsi-ld:Product:004",
+					"protocol": "http",
+					"host": [
+						"{{orion}}"
+					],
+					"path": [
+						"ngsi-ld",
+						"v1",
+						"entities",
+						""
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "Product"
 						},
-						"url": {
-							"raw": "http://{{orion}}/ngsi-ld/v1/csourceRegistrations/",
-							"protocol": "http",
-							"host": [
-								"{{orion}}"
-							],
-							"path": [
-								"ngsi-ld",
-								"v1",
-								"csourceRegistrations",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Check the registration",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/ld+json",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "http://{{orion}}/ngsi-ld/v1/csourceRegistrations/",
-							"protocol": "http",
-							"host": [
-								"{{orion}}"
-							],
-							"path": [
-								"ngsi-ld",
-								"v1",
-								"csourceRegistrations",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Read from Store 1",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Link",
-								"value": "<{{datamodels-context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "http://{{orion}}/ngsi-ld/v1/entities/urn:ngsi-ld:Building:store001?",
-							"protocol": "http",
-							"host": [
-								"{{orion}}"
-							],
-							"path": [
-								"ngsi-ld",
-								"v1",
-								"entities",
-								"urn:ngsi-ld:Building:store001"
-							],
-							"query": [
-								{
-									"key": "options",
-									"value": "keyValues",
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Read direct from Context Provider",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Link",
-								"value": "<{{datamodels-context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
-								"type": "text"
-							},
-							{
-								"key": "Content-Type",
-								"value": "application/ld+json",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "http://{{context-provider}}/static/tweets/ngsi-ld/v1/entities/urn:ngsi-ld:Building:store001?",
-							"protocol": "http",
-							"host": [
-								"{{context-provider}}"
-							],
-							"path": [
-								"static",
-								"tweets",
-								"ngsi-ld",
-								"v1",
-								"entities",
-								"urn:ngsi-ld:Building:store001"
-							],
-							"query": [
-								{
-									"key": "options",
-									"value": "keyValues",
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Direct Update to Context Provider",
-					"request": {
-						"method": "PATCH",
-						"header": [
-							{
-								"key": "Link",
-								"value": "<{{datamodels-context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
-								"type": "text"
-							},
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text",
-								"name": "Accept"
-							},
-							{
-								"key": "Accept",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{ \n\t\"tweets\": { \n\t\t\"type\": \"Property\", \n\t\t\"value\": [\n\t\t\t\"Space is big.\",\n\t\t\t\"You just won't believe how vastly, hugely, mind-bogglingly big it is.\",\n\t\t\t\"I mean, you may think it's a long way down the road to the chemist's, but that's just peanuts to space.\"\n\t\t] \n\t} \n}"
+						{
+							"key": "options",
+							"value": "keyValues"
 						},
-						"url": {
-							"raw": "http://{{context-provider}}/static/tweets/ngsi-ld/v1/entities/urn:ngsi-ld:Building:store001/attrs?",
-							"protocol": "http",
-							"host": [
-								"{{context-provider}}"
-							],
-							"path": [
-								"static",
-								"tweets",
-								"ngsi-ld",
-								"v1",
-								"entities",
-								"urn:ngsi-ld:Building:store001",
-								"attrs"
-							],
-							"query": [
-								{
-									"key": "options",
-									"value": "keyValues",
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Forwarded Update",
-					"request": {
-						"method": "PATCH",
-						"header": [
-							{
-								"key": "Link",
-								"value": "<{{datamodels-context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
-								"type": "text",
-								"disabled": true
-							},
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text",
-								"name": "Accept"
-							},
-							{
-								"key": "Accept",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{ \n\t\"type\": \"Property\", \"value\": [\n\t\t\"This must be Thursday\",\n\t\t\"I never could get the hang of Thursdays.\"\t\n\t] ,\n\t\"@context\": \"https://uri.etsi.org/ngsi-ld/v1/ngsi-ld-core-context.jsonld\"\n} "
+						{
+							"key": "attrs",
+							"value": "name,price"
 						},
-						"url": {
-							"raw": "http://{{orion}}/ngsi-ld/v1/entities/urn:ngsi-ld:Building:store001/attrs/tweets?",
-							"protocol": "http",
-							"host": [
-								"{{orion}}"
-							],
-							"path": [
-								"ngsi-ld",
-								"v1",
-								"entities",
-								"urn:ngsi-ld:Building:store001",
-								"attrs",
-								"tweets"
-							],
-							"query": [
-								{
-									"key": "options",
-									"value": "keyValues",
-									"disabled": true
-								}
-							]
+						{
+							"key": "id",
+							"value": "urn:ngsi-ld:Product:001,urn:ngsi-ld:Product:003,urn:ngsi-ld:Product:004"
 						}
-					},
-					"response": []
+					]
 				}
-			],
-			"protocolProfileBehavior": {}
+			},
+			"response": []
 		}
 	],
 	"event": [
@@ -872,25 +231,25 @@
 	],
 	"variable": [
 		{
-			"id": "36343287-bf68-4432-8014-d18861b4d70e",
+			"id": "a24a0ef3-5169-4186-8732-3422e1a5898b",
 			"key": "orion",
 			"value": "localhost:1026",
 			"type": "string"
 		},
 		{
-			"id": "7b26d971-8870-455a-adb6-4f35ec9915c9",
+			"id": "e11de8ad-567a-4c68-ad56-3cb50b59646f",
 			"key": "datamodels-context.jsonld",
 			"value": "https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld",
 			"type": "string"
 		},
 		{
-			"id": "15ab6e2c-712b-4fb6-bc3f-333ea7555d97",
+			"id": "61f4eb95-b607-4cc4-8d34-73a8b53f9072",
 			"key": "device-edge",
 			"value": "localhost:1027",
 			"type": "string"
 		},
 		{
-			"id": "2276f94a-38d3-4fbd-aa52-5ae43204fe26",
+			"id": "c89c95c5-ca41-400f-a9cc-b1f92cea9c97",
 			"key": "context-provider",
 			"value": "localhost:3000",
 			"type": "string"

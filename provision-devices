@@ -6,7 +6,8 @@
 
 set -e
 
-printf "⏳ Provisioning IoT devices "
+echo "⏳ Provisioning IoT devices"
+printf "    - IoT Devices are defined as \033[1mNGSI-v2\033[0m context data"
 
 #
 # Create a service groups for all UltraLight IoT devices
