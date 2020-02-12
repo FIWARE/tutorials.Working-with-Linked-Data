@@ -15,7 +15,7 @@ data. This removes the need to use the command-line to invoke cUrl commands.
 
 The tutorial is mainly concerned with discussing code written in Node.js, however some of the results can be checked by
 making [cUrl](https://ec.haxx.se/) commands.
-[Postman documentation](https://fiware.github.io/tutorials.Accessing-Context/) for the same commands is also available.
+[Postman documentation](https://fiware.github.io/tutorials.Working-with-Linked-Data) for the same commands is also available.
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/644a1df1e2d226da65ef)
 
@@ -86,7 +86,7 @@ Further advanced scenarios will be covered in later tutorials
 The supermarket data created in the [previous tutorial](https://github.com/FIWARE/tutorials.Relationships-Linked-Data/)
 will be loaded into the context broker. The existing relationships between the entities are defined as shown below:
 
-![](https://fiware.github.io/tutorials.Relationships-Linked-Data/img/entities-ld.png)
+![](https://fiware.github.io/tutorials.Working-with-Linked-Data/img/entities-ld.png)
 
 The **Building**, **Product**, **Shelf** and **StockOrder** entities will be used to display data on the frontend of our
 demo application.
@@ -118,7 +118,7 @@ application runs on the following URLs:
 > :information_source: **Tip** Additionally, you can also watch the status of recent requests yourself by following the
 > container logs or viewing information on `localhost:3000/app/monitor` on a web browser.
 >
-> ![FIWARE Monitor](https://fiware.github.io/tutorials.Accessing-Context/img/monitor.png)
+> ![FIWARE Monitor](https://fiware.github.io/tutorials.Working-with-Linked-Data/img/monitor.png)
 
 # Prerequisites
 
@@ -168,7 +168,7 @@ Therefore, the architecture will consist of three elements:
 Since all interactions between the elements are initiated by HTTP requests, the entities can be containerized and run
 from exposed ports.
 
-![](https://fiware.github.io/tutorials.Accessing-Context/img/architecture.png)
+![](https://fiware.github.io/tutorials.Working-with-Linked-Data/img/architecture.png)
 
 The necessary configuration information for the **Context Provider NGSI proxy** can be seen in the services section the
 of the associated `docker-compose.yml` file:
