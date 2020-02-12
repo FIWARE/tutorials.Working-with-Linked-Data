@@ -331,10 +331,10 @@ From the Data Entity diagram we can ascertain that:
 
 Therefore the code for the `displayTillInfo()` method will consist of the following steps.
 
-1. Make a request to the Context Broker to _find shelves within a known store_
-2. Reduce the result to a `id` parameter and make a second request to the Context Broker to _retrieve stocked products
+1.  Make a request to the Context Broker to _find shelves within a known store_
+2.  Reduce the result to a `id` parameter and make a second request to the Context Broker to _retrieve stocked products
    from shelves_
-3. Reduce the result to a `id` parameter and make a third request to the Context Broker to _retrieve product details for
+3.  Reduce the result to a `id` parameter and make a third request to the Context Broker to _retrieve product details for
    selected shelves_
 
 To users familar with database joins, it may seem strange being forced to making a series of requests like this, however
