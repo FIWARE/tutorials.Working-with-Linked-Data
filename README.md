@@ -707,9 +707,41 @@ context.
 
 ### Applying Entity Expansion/Compaction
 
-There is a standard mechanism
+The Within JSON-LD there is a standard mechanism for applying and altering local attribute names. The response from the context broker will always be valid NGSI-LD. NGSI-LD is just a structured subset of JSON-LD, so further changes can be made to use the data received as JSON.
+
+If we need to overide the core NGSI-LD context, we can apply an additional expansion/compaction operation over the response to retrive the data in a fully converted fashion for local use.
+
+JSON-LD libraries already exist to do this work.
+
+```javascript
+const coreContext = require('./jsonld-context/ngsi-ld.json');
+const japaneseContext = require('./jsonld-context/japanese.json');
+
+function translateRequest(req, res) {
+  request({
+    url: BASE_PATH + req.path,
+    method: req.method,
+    headers: req.headers,
+    qs: req.query,
+    json: true
+  })
+    .then(async function(cbResponse) {
+      cbResponse['@context'] = coreContext;
+      const expanded = await jsonld.expand(cbResponse);
+      const compacted = await jsonld.compact(expanded, japaneseContext);
+      delete compacted['@context'];
+      return res.send(compacted);
+    })
+    .catch(function(err) {
+      return res.send(err);
+    });
+}
+```
+
 
 #### :four: Request:
+
+A `/japanese` endpoint has been created which forwards a request to the context broker and then applies an expansion/compaction operation.
 
 ```console
 curl -L -X GET 'http://localhost:3000/japanese/ngsi-ld/v1/entities/urn:ngsi-ld:Building:store005' \
@@ -719,12 +751,17 @@ curl -L -X GET 'http://localhost:3000/japanese/ngsi-ld/v1/entities/urn:ngsi-ld:B
 
 #### Response:
 
+The response after the expansion/compaction operation is data which now uses all of the preferred attribute names - this is **no longer**  valid NGSI-LD, but would be of use if the receiving system requests data in this format.
+
+Note that the reverse expansion/compaction operation could be used to convert this JSON back into a valid NSGI-LD payload before sending data to the context broker.
+
 ```json
 {
     "氏名": "urn:ngsi-ld:Building:store005",
-    "類": "る建物",
+    "類": "ビル",
+    "カテゴリー": {"類": "プロパティ","値": "コマーシャル"},
     "住所": {
-        "類": "特性",
+        "類": "プロパティ",
         "値": {
             "addressLocality": "Marzahn",
             "addressRegion": "Berlin",
@@ -732,14 +769,19 @@ curl -L -X GET 'http://localhost:3000/japanese/ngsi-ld/v1/entities/urn:ngsi-ld:B
             "streetAddress": "Eisenacher Straße 98"
         }
     },
-    "種類": { "類": "特性", "値": "商業の" },
     "場所": {
-        "類": "地理的特性",
-        "値": { "類": "Point", "座標": [13.5646, 52.5435] }
+        "類": "ジオプロパティ",
+        "値": {"類": "Point", "座標": [13.5646, 52.5435]}
     },
-    "名前": { "類": "特性", "値": "Yuusui-en" }
+    "名前": {"類": "プロパティ", "値": "Yuusui-en"}
 }
 ```
+
+#### :arrow_forward: Video: JSON-LD Compaction & Expansion
+
+[![](http://img.youtube.com/vi/Tm3fD89dqRE/0.jpg)](https://www.youtube.com/watch?v=Tm3fD89dqRE "JSON-LD Compaction & Expansion")
+
+Click on the image above to watch a video JSON-LD expansion and compaction with reference to the `@context`.
 
 ---
 
