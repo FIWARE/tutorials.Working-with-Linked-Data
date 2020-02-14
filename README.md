@@ -19,6 +19,8 @@ making [cUrl](https://ec.haxx.se/) commands.
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/644a1df1e2d226da65ef)
 
+-   このチュートリアルは[日本語](README.ja.md)でもご覧いただけます。
+
 ## Contents
 
 <details>
@@ -26,13 +28,14 @@ making [cUrl](https://ec.haxx.se/) commands.
 
 -   [Working with Linked Data Entities](#working-with-linked-data-entities)
     -   [Linked Data Entities within a stock management system](#linked-data-entities-within-a-stock-management-system)
+    -   [The teaching goal of this tutorial](#the-teaching-goal-of-this-tutorial)
 -   [Stock Management Frontend](#stock-management-frontend)
 -   [Prerequisites](#prerequisites)
     -   [Docker](#docker)
     -   [Cygwin](#cygwin)
 -   [Architecture](#architecture)
 -   [Start Up](#start-up)
--   [Traversing Linked Data Programmatically](#traversing-linked-data-programatically)
+-   [Traversing Linked Data Programmatically](#traversing-linked-data-programmatically)
     -   [Reading Linked Data](#reading-linked-data)
         -   [Initializing the library](#initializing-the-library)
         -   [Retrieve a known Store](#retrieve-a-known-store)
@@ -59,15 +62,16 @@ making [cUrl](https://ec.haxx.se/) commands.
 
 NSGI-LD is an evolution of NGSI-v2, so it should not be surprising that Smart solutions based on NSGI-LD will need to
 cover the same basic scenarios as outlined in the previous NGSI-v2
-[tutorial](https://github.com/FIWARE/tutorials.Accessing-Context/) on programatic data access.
+[tutorial](https://github.com/FIWARE/tutorials.Accessing-Context/) on programmatic data access.
 
 NGSI-LD Linked data formalizes the structure of context entities to a greater degree, through restricting data
 attributes to be defined as either _Property_ attributes or _Relationship_ attributes only. This means that it is
 possible to traverse the context data graph with greater certainty when moving from one _Relationship_ to another. All
 the context data entities within the system are defined by JSON-LD data models, which are formally defined by
-referencing a context file, and this programatic definition should guarantee that the associated linked entity exists.
+referencing a context file, and this programmatic definition should guarantee that the associated linked entity
+exists.
 
-Three basic data access scenarios for the supermaket are defined below:
+Three basic data access scenarios for the supermarket are defined below:
 
 -   Reading Data - e.g. Give me all the data for the **Building** entity `urn:ngsi-ld:Building:store001`
 -   Aggregation - e.g. Combine the **Products** entities sold in **Building** `urn:ngsi-ld:Building:store001` and
@@ -132,8 +136,8 @@ technology which allows to different components isolated into their respective e
 -   To install Docker on Linux follow the instructions [here](https://docs.docker.com/install/)
 
 **Docker Compose** is a tool for defining and running multi-container Docker applications. A
-[YAML file](https://raw.githubusercontent.com/fiware/tutorials.Relationships-Linked-Data/master/docker-compose.yml) is
-used configure the required services for the application. This means all container services can be brought up in a
+[YAML file](https://raw.githubusercontent.com/fiware/tutorials.Working-with-Linked-Data/master/docker-compose/orion-ld.yml)
+is used configure the required services for the application. This means all container services can be brought up in a
 single command. Docker Compose is installed by default as part of Docker for Windows and Docker for Mac, however Linux
 users will need to follow the instructions found [here](https://docs.docker.com/compose/install/)
 
@@ -156,7 +160,7 @@ proxy has also been added. To visualize and interact with the Context we will ad
 Therefore, the architecture will consist of three elements:
 
 -   The [Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/) which will receive requests using
-    [NGSI](https://fiware.github.io/specifications/OpenAPI/ngsiv2)
+    [NGSI-LD](https://forge.etsi.org/swagger/ui/?url=https://forge.etsi.org/gitlab/NGSI-LD/NGSI-LD/raw/master/spec/updated/full_api.json)
 -   The underlying [MongoDB](https://www.mongodb.com/) database :
     -   Used by the Orion Context Broker to hold context data information such as data entities, subscriptions and
         registrations
@@ -171,7 +175,7 @@ from exposed ports.
 ![](https://fiware.github.io/tutorials.Working-with-Linked-Data/img/architecture.png)
 
 The necessary configuration information for the **Context Provider NGSI proxy** can be seen in the services section the
-of the associated `docker-compose.yml` file:
+of the associated `orion-ld.yml` file:
 
 ```yaml
 tutorial:
@@ -337,7 +341,7 @@ Therefore the code for the `displayTillInfo()` method will consist of the follow
 3.  Reduce the result to a `id` parameter and make a third request to the Context Broker to _retrieve product details for
    selected shelves_
 
-To users familar with database joins, it may seem strange being forced to making a series of requests like this, however
+To users familiar with database joins, it may seem strange being forced to making a series of requests like this, however
 it is necessary due to scalability issues/concerns in a large distributed setup. Direct join requests are not possible
 with NGSI-LD.
 
