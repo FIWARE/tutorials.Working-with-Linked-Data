@@ -61,7 +61,7 @@ available.
 >
 > ― This Is the House That Jack Built, Traditional English Nursery Rhyme
 
-NSGI-LD is an evolution of NGSI-v2, so it should not be surprising that Smart solutions based on NSGI-LD will need to
+NGSI-LD is an evolution of NGSI-v2, so it should not be surprising that Smart solutions based on NGSI-LD will need to
 cover the same basic scenarios as outlined in the previous NGSI-v2
 [tutorial](https://github.com/FIWARE/tutorials.Accessing-Context/) on programmatic data access.
 
@@ -539,7 +539,7 @@ curl -X PATCH 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Shelf:unit0
 
 ## Interoperability using Linked Data
 
-The introduction of Linked Data concepts to NSGI has so far marginally increased the complexity of all the context
+The introduction of Linked Data concepts to NGSI has so far marginally increased the complexity of all the context
 broker requests and we have not yet demonstrated additional benefit. The idea behind linked data is to improve data
 interoperability and remove data silos.
 
@@ -673,7 +673,7 @@ curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Building:s
 #### Response:
 
 The response is mixed - it uses attribute names and enumerations defined in `japanese-context.jsonld` with some
-exceptions. NSGI-LD **is not** JSON-LD, in that the core context is always applied after the contexts received in the
+exceptions. NGSI-LD **is not** JSON-LD, in that the core context is always applied after the contexts received in the
 `Link` header. Since `name` and `location` are reserved attribute names, they are supplied using the default core
 context.
 
@@ -753,7 +753,7 @@ curl -L -X GET 'http://localhost:3000/japanese/ngsi-ld/v1/entities/urn:ngsi-ld:B
 
 The response after the expansion/compaction operation is data which now uses all of the preferred attribute names - this is **no longer**  valid NGSI-LD, but would be of use if the receiving system requests data in this format.
 
-Note that the reverse expansion/compaction operation could be used to convert this JSON back into a valid NSGI-LD payload before sending data to the context broker.
+Note that the reverse expansion/compaction operation could be used to convert this JSON back into a valid NGSI-LD payload before sending data to the context broker.
 
 ```json
 {
