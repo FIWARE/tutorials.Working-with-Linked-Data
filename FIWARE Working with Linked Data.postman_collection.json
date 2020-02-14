@@ -350,6 +350,191 @@
 				}
 			],
 			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Interoperability using Linked Data",
+			"item": [
+				{
+					"name": "Creating an Entity using  an Alternate Schema",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/ld+json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"urn:ngsi-ld:Building:store005\",\n    \"type\": \"る建物\",\n    \"種類\": {\n    \t\"type\": \"Property\",\n        \"value\": [\"商業の\"]\n    },\n    \"住所\": {\n        \"type\": \"Property\",\n        \"value\": {\n            \"streetAddress\": \"Eisenacher Straße 98\",\n            \"addressRegion\": \"Berlin\",\n            \"addressLocality\": \"Marzahn\",\n            \"postalCode\": \"12685\"\n        }\n    },\n    \"場所\": {\n        \"type\": \"GeoProperty\",\n        \"value\": {\n             \"type\": \"Point\",\n             \"coordinates\": [13.5646, 52.5435]\n        }\n    },\n    \"名前\": {\n        \"type\": \"Property\",\n        \"value\": \"Yuusui-en\"\n    },\n    \"@context\":\"https://fiware.github.io/tutorials.Step-by-Step/japanese-context.jsonld\"\n}"
+						},
+						"url": {
+							"raw": "http://{{orion}}/ngsi-ld/v1/entities/",
+							"protocol": "http",
+							"host": [
+								"{{orion}}"
+							],
+							"path": [
+								"ngsi-ld",
+								"v1",
+								"entities",
+								""
+							]
+						},
+						"description": "When creating a data entity, short names for all of the URIs mapped in the Japanese JSON-LD `@context` can be used freely in the payload of the request.\n\nAs can be seen in the example below, attribute names and enumerated values (such as `る建物`  = `Building`) can be used throughout. The  NGSI-LD specification mandates that the attributes defined in the NGSI-LD API (i.e. the core `@context`) are used to define the attributes. Therefore elements of the request such as `id` `type` and `Property` remain unchanged, although as we will see below this can be circumvented.\n\nOur Japanese context provider can create a new `Building` using the request below:"
+					},
+					"response": []
+				},
+				{
+					"name": "Reading an Entity using the default schema",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/ld+json"
+							},
+							{
+								"key": "Link",
+								"value": "<{{datamodels-context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text",
+								"name": "Accept",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://{{orion}}/ngsi-ld/v1/entities/urn:ngsi-ld:Building:store005",
+							"protocol": "http",
+							"host": [
+								"{{orion}}"
+							],
+							"path": [
+								"ngsi-ld",
+								"v1",
+								"entities",
+								"urn:ngsi-ld:Building:store005"
+							]
+						},
+						"description": "Within the context broker the full URIs are used to refer to the attributes and enumerations. Even though it uses different attribute short names, the Japanese JSON-LD `@context`  file agrees with the standard tutorial context about the full URIs used for a **Building** entity  - effectively it is using the same data model.\n\nTherefore it is possible to request the new **Building** (created using the Japanese data model) and have it return using the short names specified in the standard tutorial JSON-LD `@context`, this is done by supplying the `Link` header is pointing to the tutorial JSON-LD `@context` file.\n\nThe response is an ordinary **Building** entity which standard attribute names (such as `name` and `location` and it also returns the standard enumeration for **Building** `category`.\n\nThis means that our Supermarket application is able to display the new building without any modification to the underlying codebase. The data is interoperable.\n\nGoto `http://localhost:3000/app/store/urn:ngsi-ld:Building:store005` to show that the new **Building** can be displayed:\n\n![](https://fiware.github.io/tutorials.Working-with-Linked-Data/img/store5.png)"
+					},
+					"response": []
+				},
+				{
+					"name": "Reading an Entity using an alternate schema",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/ld+json"
+							},
+							{
+								"key": "Link",
+								"value": "<{{japanese-context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text",
+								"name": "Accept",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://{{orion}}/ngsi-ld/v1/entities/urn:ngsi-ld:Building:store003",
+							"protocol": "http",
+							"host": [
+								"{{orion}}"
+							],
+							"path": [
+								"ngsi-ld",
+								"v1",
+								"entities",
+								"urn:ngsi-ld:Building:store003"
+							]
+						},
+						"description": "With one exception, there is no hierarchy defined within NGSI-LD `@context` files - any defined `@context` is therefore possible to read any of the existing **Building** entities and apply the Japanese `@context`. The `@context` to used is supplied in the `Link` header.\n\nThe response is mixed - it uses  attribute names and enumerations defined in `japanese-context.jsonld` with some exceptions. NSGI-LD **is not** JSON-LD, in that the core context is always applied after the contexts received in the `Link` header. Since `name` and `location` are reserved attribute names, they are supplied using the default core context."
+					},
+					"response": []
+				},
+				{
+					"name": "Applying Entity Expansion/Compation",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/ld+json",
+								"disabled": true
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text",
+								"name": "Accept"
+							},
+							{
+								"key": "Link",
+								"value": "<{{japanese-context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{context-provider}}/japanese/ngsi-ld/v1/entities/urn:ngsi-ld:Building:store005?",
+							"protocol": "http",
+							"host": [
+								"{{context-provider}}"
+							],
+							"path": [
+								"japanese",
+								"ngsi-ld",
+								"v1",
+								"entities",
+								"urn:ngsi-ld:Building:store005"
+							],
+							"query": [
+								{
+									"key": "options",
+									"value": "keyValues",
+									"disabled": true
+								}
+							]
+						},
+						"description": "The Within JSON-LD there is a standard mechanism for applying and altering local attribute names. The response from the context broker will always be valid NGSI-LD. NGSI-LD is just a structured subset of JSON-LD, so further changes can be made to use the data received as JSON.\n\nIf we need to overide the core NGSI-LD context, we can apply an additional expansion/compaction operation over the response to retrive the data in a fully converted fashion for local use.  \n\nJSON-LD libraries already exist to do this work.\n\n```javascript\nconst coreContext = require('./jsonld-context/ngsi-ld.json');\nconst japaneseContext = require('./jsonld-context/japanese.json');\n\nfunction translateRequest(req, res) {\n  request({\n    url: BASE_PATH + req.path, \n    method: req.method,\n    headers: req.headers,\n    qs: req.query,\n    json: true\n  })\n    .then(async function(cbResponse) {\n      cbResponse['@context'] = coreContext;\n      const expanded = await jsonld.expand(cbResponse);\n      const compacted = await jsonld.compact(expanded, japaneseContext);\n      delete compacted['@context'];\n      return res.send(compacted);\n    })\n    .catch(function(err) {\n      return res.send(err);\n    });\n}\n```\n\nThe response after the expansion/compaction operation is data which uses all of the preferred attribute names - this is **no longer**  valid NGSI-LD, but would be of use if the receiving system requests data in this format.\n\nNote that the reverse expansion/compaction operation could be used to convert this JSON back into a valid NSGI-LD payload before sending data to the context broker.\n\n\n#### :arrow_forward: Video: JSON-LD Compaction & Expansion\n\n[![](http://img.youtube.com/vi/Tm3fD89dqRE/0.jpg)](https://www.youtube.com/watch?v=Tm3fD89dqRE \"JSON-LD Compaction & Expansion\")\n\nClick on the image above to watch a video JSON-LD expansion and compaction with reference to the `@context`."
+					},
+					"response": []
+				}
+			],
+			"description": "An alternative Japanese JSON-LD `@context` file has been created and published to an external server. The file can be found here: `https://fiware.github.io/tutorials.Step-by-Step/japanese-context.jsonld`. Alternate data mappings can be found for all attribute names used within the tutorials.\n\n> **Note**: For comparision the standard tutorial JSON-LD `@context` file can be found here:\n> `https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld`",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "e93af0c5-33d3-4b9b-b5c5-675f2b6ec644",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "611eaae5-2a6a-41d8-a764-8c7b0ad917b9",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
 		}
 	],
 	"event": [
@@ -376,27 +561,33 @@
 	],
 	"variable": [
 		{
-			"id": "54c2e783-c52a-4ba1-92a1-cfddd2b6380a",
+			"id": "c7248b3d-9055-4703-874a-69e6bafa9fff",
 			"key": "orion",
 			"value": "localhost:1026",
 			"type": "string"
 		},
 		{
-			"id": "4b19213c-501c-4767-8992-bb6b7b0a23b0",
+			"id": "5d62e282-27eb-4035-9cb6-1af6e4c487d7",
 			"key": "datamodels-context.jsonld",
 			"value": "https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld",
 			"type": "string"
 		},
 		{
-			"id": "82ad4a42-5fba-43b1-8e46-13eb123214ee",
+			"id": "e8b8f492-d973-405b-9530-4eee9c4ee432",
 			"key": "device-edge",
 			"value": "localhost:1027",
 			"type": "string"
 		},
 		{
-			"id": "eca913b5-eba5-4333-bcb3-c1ee3e93f606",
+			"id": "a0c77e23-5833-44dd-98d3-68e95651500d",
 			"key": "context-provider",
 			"value": "localhost:3000",
+			"type": "string"
+		},
+		{
+			"id": "b6dc3edd-ac11-48d0-ab5f-09043a6494eb",
+			"key": "japanese-context.jsonld",
+			"value": "https://fiware.github.io/tutorials.Step-by-Step/japanese-context.jsonld",
 			"type": "string"
 		}
 	],
