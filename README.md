@@ -567,7 +567,7 @@ found for all attribute names used within the tutorials.
 When creating a data entity, short names for all of the URIs mapped in the Japanese JSON-LD `@context` can be used
 freely in the payload of the request.
 
-As can be seen in the example below, attribute names and enumerated values (such as `る建物` = `Building`) can be used
+As can be seen in the example below, attribute names and enumerated values (such as `ビル` = `Building`) can be used
 throughout. The NGSI-LD specification mandates that the attributes defined in the NGSI-LD API (i.e. the core `@context`)
 are used to define the attributes. Therefore elements of the request such as `id` `type` and `Property` remain
 unchanged, although as we will see below this can be circumvented.
@@ -580,8 +580,8 @@ curl -L -X POST 'http://localhost:1026/ngsi-ld/v1/entities/' \
 -H 'Content-Type: application/ld+json' \
 --data-raw '{
     "id": "urn:ngsi-ld:Building:store005",
-    "type": "る建物",
-    "種類": {"type": "Property", "value": ["商業の"]},
+    "type": "ビル",
+    "カテゴリー": {"type": "Property", "value": ["コマーシャル"]},
     "住所": {
         "type": "Property",
         "value": {
@@ -681,7 +681,7 @@ context.
 {
     "@context": "https://fiware.github.io/tutorials.Step-by-Step/japanese-context.jsonld",
     "id": "urn:ngsi-ld:Building:store003",
-    "type": "る建物",
+    "type": "ビル",
     "家具": {
         "type": "Relationship",
         "object": ["urn:ngsi-ld:Shelf:unit006", "urn:ngsi-ld:Shelf:unit007", "urn:ngsi-ld:Shelf:unit008"]
@@ -697,7 +697,7 @@ context.
         "検証済み": { "type": "Property", "value": false }
     },
     "name": { "type": "Property", "value": "East Side Galleria" },
-    "種類": { "type": "Property", "value": "商業の" },
+    "カテゴリー": { "type": "Property", "value": "コマーシャル" },
     "location": {
         "type": "GeoProperty",
         "value": { "type": "Point", "coordinates": [13.4447, 52.5031] }
