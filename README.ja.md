@@ -44,6 +44,11 @@
     -   [リンクト・データの更新](#updating-linked-data)
         -   [商品を在庫している棚を探す](#find-a-shelf-stocking-a-product)
         -   [棚の状態を更新](#update-the-state-of-a-shelf)
+    -   [リンクト・データを使用した相互運用性](#interoperability-using-linked-data)
+        -   [代替スキーマを使用したエンティティの作成](#creating-an-entity-using an-alternate-schema)
+        -   [デフォルトのスキーマを使用したエンティティの読み取り](#reading-an-entity-using-the-default-schema)
+        -   [代替スキーマを使用したエンティティの読み取り](#reading-an-entity-using-an-alternate-schema)
+        -   [エンティティ展開/圧縮 (Expansion/Compaction) の適用](#applying-entity-expansioncompaction)
 
 </details>
 
@@ -59,7 +64,7 @@
 >
 > ― This Is the House That Jack Built, Traditional English Nursery Rhyme
 
-NSGI-LD は NGSI-v2 の進化形であるため、NSGI-LD に基づくスマート・ソリューションが、プログラムによるデータ・アクセスに
+NGSI-LD は NGSI-v2 の進化形であるため、NSGI-LD に基づくスマート・ソリューションが、プログラムによるデータ・アクセスに
 関する以前の NGSI-v2 [チュートリアル](https://github.com/FIWARE/tutorials.Accessing-Context/)で概説したものと同じ
 基本シナリオをカバーする必要があることは驚くべきことではありません。
 
@@ -240,6 +245,8 @@ cd tutorials.Working-with-Linked-Data
 
 `http://localhost:3000/app/store/urn:ngsi-ld:Building:store001` に移動して、動作中のスーパーマーケット・データ
 ・アプリケーションを表示して操作します。
+
+![](https://fiware.github.io/tutorials.Working-with-Linked-Data/img/store.png)
 
 <a name="reading-linked-data"></a>
 ## リンクト・データの読み取り
@@ -550,6 +557,265 @@ curl -X PATCH 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Shelf:unit0
 -H 'Content-Type: application/json' \
 -d '{ "numberOfItems": { "type": "Property", "value": 10 } }'
 ```
+
+<a name="interoperability-using-linked-data"></a>
+## リンクト・データを使用した相互運用性
+
+リンクト・データの概念を NGSI に導入したことにより、これまでのところ、すべての Context Broker のリクエストの複雑さが
+わずかに増加しており、追加の利点はまだ実証されていません。リンクされたデータの背後にある考え方は、データの相互運用性を
+改善し、データ・サイロを取り除くことです。
+
+このデモンストレーションとして、異なるスキーマを使用している別のコンテキスト・プロバイダからのコンテキスト・データ・
+エンティティを組み込むことを想像してください。日本のコンテキスト・プロバイダは、`name`, `category`, `location` などを
+使用するのではなく、漢字に基づいたデータ属性を使用しています。
+
+Core NGSI-LD の `@context` は、`name` = `https://uri.etsi.org/ngsi-ld/name` を定義します。同様に、
+`名前` = `https://uri.etsi.org/ngsi-ld/name` を定義でき、属性名と列挙値の代替マッピングを導入します。
+
+2つのシステムがデータ交換用の一意の URI の**共通**システムに同意できる場合、それらのドメイン内でこれらの値をローカルで
+自由に再解釈できます。
+
+<a name="creating-an-entity-using an-alternate-schema"></a>
+### 代替スキーマを使用したエンティティの作成
+
+代替の日本語 JSON-LD `@context` ファイルが作成され、外部サーバに公開されました。このファイルは、
+`https://fiware.github.io/tutorials.Step-by-Step/japanese-context.jsonld` にあります。 チュートリアル内で使用される
+すべての属性名の代替データ・マッピングを見つけることができます。
+
+> **注**: 比較のために、標準のチュートリアル JSON-LD `@context` ファイルはこちらにあります。:
+> `https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld`
+
+#### 1 リクエスト:
+
+データ・エンティティを作成する際、日本語の JSON-LD `@context` にマッピングされたすべての URI の短縮名は、リクエストの
+ペイロードで自由に使用できます。
+
+以下の例からわかるように、属性名と列挙値 (`ビル` = `Building` など）を全体で使用できます。 NGSI-LD 仕様では、NGSI-LD API
+で定義された属性 (つまり、core `@context`) を使用して属性を定義することが義務付けられています。したがって、`id`, `type`,
+`Property` などのリクエストの要素は変更されませんが、以下で説明するように、これは回避できます。
+
+日本のコンテキスト・プロバイダは、以下のリクエストを使用して新しい `Building` を作成できます。`Link` ヘッダは、属性名と
+列挙の完全な URI を提供する日本語の JSON-LD `@context` ファイルを指します。
+
+```bash
+curl -L -X POST 'http://localhost:1026/ngsi-ld/v1/entities/' \
+-H 'Content-Type: application/ld+json' \
+--data-raw '{
+    "id": "urn:ngsi-ld:Building:store005",
+    "type": "ビル",
+    "カテゴリー": {"type": "Property", "value": ["コマーシャル"]},
+    "住所": {
+        "type": "Property",
+        "value": {
+            "streetAddress": "Eisenacher Straße 98",
+            "addressRegion": "Berlin",
+            "addressLocality": "Marzahn",
+            "postalCode": "12685"
+        }
+    },
+    "場所": {
+        "type": "GeoProperty",
+        "value": {"type": "Point","coordinates": [13.5646, 52.5435]}
+    },
+    "名前": {"type": "Property","value": "Yuusui-en"},
+    "@context":"https://fiware.github.io/tutorials.Step-by-Step/japanese-context.jsonld"
+}'
+```
+
+この例では、名前とアドレスは単純な文字列として提供されていることに注意してください - JSON-LD は国際化を可能にするために
+`@lang` 定義をサポートしますが、これはここでは説明しない高度なトピックです。
+
+<a name="reading-an-entity-using-the-default-schema"></a>
+### デフォルトのスキーマを使用したエンティティの読み取り
+
+Context Broker 内では、属性と列挙を参照するために完全な URI が使用されます。異なる属性の短縮名を使用しますが、日本語の
+JSON-LD `@context` ファイルは、**Building** エンティティに使用される完全な URI に関する標準のチュートリアル・コンテキスト
+に同意します。事実上、同じデータモデルを使用しています。
+
+したがって、日本語データモデルを使用して作成された、新しい **Building** をリクエストし、標準の tutorial JSON-LD
+`@context` で指定された短縮名を使用して返すことができます。これは、`Link` ヘッダは、tutorial JSON-LD の`@context`
+ファイルを指しています。
+
+#### 2 リクエスト:
+
+```bash
+curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Building:store005' \
+-H 'Content-Type: application/ld+json' \
+-H 'Link: <https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"'
+```
+
+#### レスポンス:
+
+レスポンスは、標準の属性名 (`name` や `location` など) である、通常の **Building** エンティティであり、**Building**
+`category` の標準列挙 (standard enumeration) も返します。
+
+```json
+{
+    "@context": "https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld",
+    "id": "urn:ngsi-ld:Building:store005",
+    "type": "Building",
+    "address": {
+        "type": "Property",
+        "value": {
+            "streetAddress": "Eisenacher Straße 98",
+            "addressRegion": "Berlin",
+            "addressLocality": "Marzahn",
+            "postalCode": "12685"
+        }
+    },
+    "location": {
+        "type": "GeoProperty",
+        "value": { "type": "Point", "coordinates": [13.5646, 52.5435] }
+    },
+    "name": { "type": "Property", "value": "Yuusui-en" },
+    "category": { "type": "Property", "value": "commercial" }
+}
+```
+
+これは、スーパーマーケット・アプリケーションが、基礎となるコードベースを変更せずに新しいビルディングを表示できることを
+意味します。データは相互運用可能です。
+
+`http://localhost:3000/app/store/urn:ngsi-ld:Building:store005` に移動して、新しい **Building** を表示できることを
+示します :
+
+![](https://fiware.github.io/tutorials.Working-with-Linked-Data/img/store5.png)
+
+<a name="reading-an-entity-using-an-alternate-schema"></a>
+### 代替スキーマを使用したエンティティの読み取り
+
+1つの例外を除き、NGSI-LD の `@context` ファイル内に定義された階層はありません。したがって、定義された `@context` は、
+既存の **Building** エンティティを読み取り、日本語の `@context` を適用できます。使用する `@context` は、`Link` ヘッダで
+提供されます。
+
+#### 3 リクエスト:
+
+```bash
+curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Building:store003' \
+-H 'Content-Type: application/ld+json' \
+-H 'Link: <https://fiware.github.io/tutorials.Step-by-Step/japanese-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"'
+```
+
+#### レスポンス:
+
+The response is mixed - it uses attribute names and enumerations defined in `japanese-context.jsonld` with some
+exceptions. NGSI-LD **is not** JSON-LD, in that the core context is always applied after the contexts received in the
+`Link` header. Since `name` and `location` are reserved attribute names, they are supplied using the default core
+context.
+
+レスポンスはミックスされています - いくつかの例外を除き、`japanese-context.jsonld` で定義された属性名と列挙を使用
+します。NGSI-LD は JSON-lD **ではありません**。コア・コンテキスト (Core Context) は常に、`Link` ヘッダで受信された
+コンテキストの後に適用されます。`name` と `location` は予約済みの属性名であるため、デフォルトのコア・コンテキストを
+使用して提供されます。
+
+```json
+{
+    "@context": "https://fiware.github.io/tutorials.Step-by-Step/japanese-context.jsonld",
+    "id": "urn:ngsi-ld:Building:store003",
+    "type": "ビル",
+    "家具": {
+        "type": "Relationship",
+        "object": ["urn:ngsi-ld:Shelf:unit006", "urn:ngsi-ld:Shelf:unit007", "urn:ngsi-ld:Shelf:unit008"]
+    },
+    "住所": {
+        "type": "Property",
+        "value": {
+            "streetAddress": "Mühlenstrasse 10",
+            "addressRegion": "Berlin",
+            "addressLocality": "Friedrichshain",
+            "postalCode": "10243"
+        },
+        "検証済み": { "type": "Property", "value": false }
+    },
+    "name": { "type": "Property", "value": "East Side Galleria" },
+    "カテゴリー": { "type": "Property", "value": "コマーシャル" },
+    "location": {
+        "type": "GeoProperty",
+        "value": { "type": "Point", "coordinates": [13.4447, 52.5031] }
+    }
+}
+```
+
+<a name="applying-entity-expansioncompaction"></a>
+### エンティティ展開/圧縮 (Expansion/Compaction) の適用
+
+JSON-LD 内には、ローカル属性名を適用および変更するための標準メカニズムがあります。 Cotext Broker からのレスポンスは、
+常に有効な NGSI-LD になります。NGSI-LD は JSON-LD の構造化されたサブセットであるため、JSON として受信したデータを使用
+するためにさらに変更を加えることができます。
+
+Core NGSI-LD context をオーバーライドする必要がある場合、レスポンスに追加の展開/圧縮操作を適用して、ローカルで使用する
+ために完全に変換された方法でデータを取得できます。
+
+この作業を行うための JSON-LD ライブラリがすでに存在します。
+
+```javascript
+const coreContext = require("./jsonld-context/ngsi-ld.json");
+const japaneseContext = require("./jsonld-context/japanese.json");
+function translateRequest(req, res) {
+    request({
+        url: BASE_PATH + req.path,
+        method: req.method,
+        headers: req.headers,
+        qs: req.query,
+        json: true
+    })
+        .then(async function(cbResponse) {
+            cbResponse["@context"] = coreContext;
+            const expanded = await jsonld.expand(cbResponse);
+            const compacted = await jsonld.compact(expanded, japaneseContext);
+            delete compacted["@context"];
+            return res.send(compacted);
+        })
+        .catch(function(err) {
+            return res.send(err);
+        });
+}
+```
+
+#### 4 リクエスト:
+
+リクエストを Context Broker に転送してから展開/圧縮操作を適用する `/japanesei` エンドポイントが作成されました。
+
+```bash
+curl -L -X GET 'http://localhost:3000/japanese/ngsi-ld/v1/entities/urn:ngsi-ld:Building:store005' \
+-H 'Accept: application/json' \
+-H 'Link: <https://fiware.github.io/tutorials.Step-by-Step/japanese-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"'
+```
+
+#### レスポンス:
+
+展開/圧縮の操作後のレスポンスは、優先属性名 (the preferred attribute names) のすべてを使用するデータです。これは有効な
+NGSI-LD では**なくなりました**が、受信したシステムがこの形式のデータをリクエストする場合に役立ちます。
+
+Context Broker にデータを送信する前に、逆の展開/圧縮操作を使用して、この JSON を有効な NGSI-LD ペイロードに変換できる
+ことに注意してください。
+
+```json
+{
+    "氏名": "urn:ngsi-ld:Building:store005",
+    "類": "ビル",
+    "カテゴリー": { "類": "プロパティ", "値": "コマーシャル" },
+    "住所": {
+        "類": "プロパティ",
+        "値": {
+            "addressLocality": "Marzahn",
+            "addressRegion": "Berlin",
+            "postalCode": "12685",
+            "streetAddress": "Eisenacher Straße 98"
+        }
+    },
+    "場所": {
+        "類": "ジオプロパティ",
+        "値": { "類": "Point", "座標": [13.5646, 52.5435] }
+    },
+    "名前": { "類": "プロパティ", "値": "Yuusui-en" }
+}
+```
+
+#### Video: JSON-LD 圧縮と展開 (Compaction & Expansion)
+
+[![](http://img.youtube.com/vi/Tm3fD89dqRE/0.jpg)](https://www.youtube.com/watch?v=Tm3fD89dqRE "JSON-LD Compaction & Expansion")
+
+上の画像をクリックして、`@context` と相互運用性に関するビデオ JSON-LD の圧縮と展開をご覧ください。
 
 ---
 
