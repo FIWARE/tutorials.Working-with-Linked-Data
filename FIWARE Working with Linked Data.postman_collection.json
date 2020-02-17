@@ -366,7 +366,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"id\": \"urn:ngsi-ld:Building:store005\",\n    \"type\": \"る建物\",\n    \"種類\": {\n    \t\"type\": \"Property\",\n        \"value\": [\"商業の\"]\n    },\n    \"住所\": {\n        \"type\": \"Property\",\n        \"value\": {\n            \"streetAddress\": \"Eisenacher Straße 98\",\n            \"addressRegion\": \"Berlin\",\n            \"addressLocality\": \"Marzahn\",\n            \"postalCode\": \"12685\"\n        }\n    },\n    \"場所\": {\n        \"type\": \"GeoProperty\",\n        \"value\": {\n             \"type\": \"Point\",\n             \"coordinates\": [13.5646, 52.5435]\n        }\n    },\n    \"名前\": {\n        \"type\": \"Property\",\n        \"value\": \"Yuusui-en\"\n    },\n    \"@context\":\"https://fiware.github.io/tutorials.Step-by-Step/japanese-context.jsonld\"\n}"
+							"raw": "{\n    \"id\": \"urn:ngsi-ld:Building:store005\",\n    \"type\": \"ビル\",\n    \"カテゴリー\": {\n    \t\"type\": \"Property\",\n        \"value\": [\"コマーシャル\"]\n    },\n    \"住所\": {\n        \"type\": \"Property\",\n        \"value\": {\n            \"streetAddress\": \"Eisenacher Straße 98\",\n            \"addressRegion\": \"Berlin\",\n            \"addressLocality\": \"Marzahn\",\n            \"postalCode\": \"12685\"\n        }\n    },\n    \"場所\": {\n        \"type\": \"GeoProperty\",\n        \"value\": {\n             \"type\": \"Point\",\n             \"coordinates\": [13.5646, 52.5435]\n        }\n    },\n    \"名前\": {\n        \"type\": \"Property\",\n        \"value\": \"Yuusui-en\"\n    },\n    \"@context\":\"https://fiware.github.io/tutorials.Step-by-Step/japanese-context.jsonld\"\n}"
 						},
 						"url": {
 							"raw": "http://{{orion}}/ngsi-ld/v1/entities/",
@@ -561,31 +561,31 @@
 	],
 	"variable": [
 		{
-			"id": "c7248b3d-9055-4703-874a-69e6bafa9fff",
+			"id": "13ad13b0-7943-4168-819a-a210cb66f533",
 			"key": "orion",
 			"value": "localhost:1026",
 			"type": "string"
 		},
 		{
-			"id": "5d62e282-27eb-4035-9cb6-1af6e4c487d7",
+			"id": "3e295de3-71ad-45cf-ab2c-25d0937c5664",
 			"key": "datamodels-context.jsonld",
 			"value": "https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld",
 			"type": "string"
 		},
 		{
-			"id": "e8b8f492-d973-405b-9530-4eee9c4ee432",
+			"id": "ca7b4061-b7ed-41da-82de-0f178dc905da",
 			"key": "device-edge",
 			"value": "localhost:1027",
 			"type": "string"
 		},
 		{
-			"id": "a0c77e23-5833-44dd-98d3-68e95651500d",
+			"id": "860a0325-66c5-477d-a9db-877ecc2c20b1",
 			"key": "context-provider",
 			"value": "localhost:3000",
 			"type": "string"
 		},
 		{
-			"id": "b6dc3edd-ac11-48d0-ab5f-09043a6494eb",
+			"id": "b37db20d-6a88-4f3f-b767-c941b7e6db94",
 			"key": "japanese-context.jsonld",
 			"value": "https://fiware.github.io/tutorials.Step-by-Step/japanese-context.jsonld",
 			"type": "string"
