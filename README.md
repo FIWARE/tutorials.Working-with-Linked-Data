@@ -47,6 +47,11 @@ available.
     -   [Updating Linked Data](#updating-linked-data)
         -   [Find a shelf stocking a product](#find-a-shelf-stocking-a-product)
         -   [Update the state of a shelf](#update-the-state-of-a-shelf)
+    -   [Interoperability using Linked Data](#interoperability-using-linked-data)
+        -   [Creating an Entity using an Alternate Schema](#creating-an-entity-using-an-alternate-schema)
+        -   [Reading an Entity using the default schema](#reading-an-entity-using-the-default-schema)
+        -   [Reading an Entity using an alternate schema](#reading-an-entity-using-an-alternate-schema)
+        -   [Applying Entity Expansion/Compaction](#applying-entity-expansioncompaction)
 
 </details>
 
@@ -559,7 +564,7 @@ An alternative Japanese JSON-LD `@context` file has been created and published t
 found here: `https://fiware.github.io/tutorials.Step-by-Step/japanese-context.jsonld`. Alternate data mappings can be
 found for all attribute names used within the tutorials.
 
-> :information_source: **Note**: For comparision the standard tutorial JSON-LD `@context` file can be found here:
+> :information_source: **Note**: For comparison the standard tutorial JSON-LD `@context` file can be found here:
 > `https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld`
 
 #### :one: Request:
@@ -707,9 +712,12 @@ context.
 
 ### Applying Entity Expansion/Compaction
 
-The Within JSON-LD there is a standard mechanism for applying and altering local attribute names. The response from the context broker will always be valid NGSI-LD. NGSI-LD is just a structured subset of JSON-LD, so further changes can be made to use the data received as JSON.
+The Within JSON-LD there is a standard mechanism for applying and altering local attribute names. The response from the
+context broker will always be valid NGSI-LD. NGSI-LD is just a structured subset of JSON-LD, so further changes can be
+made to use the data received as JSON.
 
-If we need to overide the core NGSI-LD context, we can apply an additional expansion/compaction operation over the response to retrive the data in a fully converted fashion for local use.
+If we need to override the core NGSI-LD context, we can apply an additional expansion/compaction operation over the
+response to retrieve the data in a fully converted fashion for local use.
 
 JSON-LD libraries already exist to do this work.
 
@@ -751,9 +759,11 @@ curl -L -X GET 'http://localhost:3000/japanese/ngsi-ld/v1/entities/urn:ngsi-ld:B
 
 #### Response:
 
-The response after the expansion/compaction operation is data which now uses all of the preferred attribute names - this is **no longer**  valid NGSI-LD, but would be of use if the receiving system requests data in this format.
+The response after the expansion/compaction operation is data which now uses all of the preferred attribute names - this is
+**no longer**  valid NGSI-LD, but would be of use if the receiving system requests data in this format.
 
-Note that the reverse expansion/compaction operation could be used to convert this JSON back into a valid NGSI-LD payload before sending data to the context broker.
+Note that the reverse expansion/compaction operation could be used to convert this JSON back into a valid NGSI-LD payload
+before sending data to the context broker.
 
 ```json
 {
