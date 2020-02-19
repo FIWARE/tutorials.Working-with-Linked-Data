@@ -631,7 +631,7 @@ curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Building:s
 The response is an ordinary **Building** entity which standard attribute names (such as `name` and `location` and it
 also returns the standard enumeration for **Building** `category`.
 
-```json
+```jsonld
 {
     "@context": "https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld",
     "id": "urn:ngsi-ld:Building:store005",
@@ -682,7 +682,7 @@ exceptions. NGSI-LD **is not** JSON-LD, in that the core context is always appli
 `Link` header. Since `name` and `location` are reserved attribute names, they are supplied using the default core
 context.
 
-```json
+```jsonld
 {
     "@context": "https://fiware.github.io/tutorials.Step-by-Step/japanese-context.jsonld",
     "id": "urn:ngsi-ld:Building:store003",

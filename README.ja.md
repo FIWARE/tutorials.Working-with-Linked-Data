@@ -649,7 +649,7 @@ curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Building:s
 レスポンスは、標準の属性名 (`name` や `location` など) である、通常の **Building** エンティティであり、**Building**
 `category` の標準列挙 (standard enumeration) も返します。
 
-```json
+```jsonld
 {
     "@context": "https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld",
     "id": "urn:ngsi-ld:Building:store005",
@@ -707,7 +707,7 @@ context.
 コンテキストの後に適用されます。`name` と `location` は予約済みの属性名であるため、デフォルトのコア・コンテキストを
 使用して提供されます。
 
-```json
+```jsonld
 {
     "@context": "https://fiware.github.io/tutorials.Step-by-Step/japanese-context.jsonld",
     "id": "urn:ngsi-ld:Building:store003",
