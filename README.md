@@ -722,34 +722,34 @@ response to retrieve the data in a fully converted fashion for local use.
 JSON-LD libraries already exist to do this work.
 
 ```javascript
-const coreContext = require('./jsonld-context/ngsi-ld.json');
-const japaneseContext = require('./jsonld-context/japanese.json');
+const coreContext = require("./jsonld-context/ngsi-ld.json");
+const japaneseContext = require("./jsonld-context/japanese.json");
 
 function translateRequest(req, res) {
-  request({
-    url: BASE_PATH + req.path,
-    method: req.method,
-    headers: req.headers,
-    qs: req.query,
-    json: true
-  })
-    .then(async function(cbResponse) {
-      cbResponse['@context'] = coreContext;
-      const expanded = await jsonld.expand(cbResponse);
-      const compacted = await jsonld.compact(expanded, japaneseContext);
-      delete compacted['@context'];
-      return res.send(compacted);
+    request({
+        url: BASE_PATH + req.path,
+        method: req.method,
+        headers: req.headers,
+        qs: req.query,
+        json: true
     })
-    .catch(function(err) {
-      return res.send(err);
-    });
+        .then(async function(cbResponse) {
+            cbResponse["@context"] = coreContext;
+            const expanded = await jsonld.expand(cbResponse);
+            const compacted = await jsonld.compact(expanded, japaneseContext);
+            delete compacted["@context"];
+            return res.send(compacted);
+        })
+        .catch(function(err) {
+            return res.send(err);
+        });
 }
 ```
 
-
 #### :four: Request:
 
-A `/japanese` endpoint has been created which forwards a request to the context broker and then applies an expansion/compaction operation.
+A `/japanese` endpoint has been created which forwards a request to the context broker and then applies an
+expansion/compaction operation.
 
 ```console
 curl -L -X GET 'http://localhost:3000/japanese/ngsi-ld/v1/entities/urn:ngsi-ld:Building:store005' \
@@ -759,17 +759,17 @@ curl -L -X GET 'http://localhost:3000/japanese/ngsi-ld/v1/entities/urn:ngsi-ld:B
 
 #### Response:
 
-The response after the expansion/compaction operation is data which now uses all of the preferred attribute names - this is
-**no longer**  valid NGSI-LD, but would be of use if the receiving system requests data in this format.
+The response after the expansion/compaction operation is data which now uses all of the preferred attribute names - this
+is **no longer** valid NGSI-LD, but would be of use if the receiving system requests data in this format.
 
-Note that the reverse expansion/compaction operation could be used to convert this JSON back into a valid NGSI-LD payload
-before sending data to the context broker.
+Note that the reverse expansion/compaction operation could be used to convert this JSON back into a valid NGSI-LD
+payload before sending data to the context broker.
 
 ```json
 {
     "識別子": "urn:ngsi-ld:Building:store005",
     "タイプ": "ビル",
-    "カテゴリー": {"タイプ": "プロパティ","値": "コマーシャル"},
+    "カテゴリー": { "タイプ": "プロパティ", "値": "コマーシャル" },
     "住所": {
         "タイプ": "プロパティ",
         "値": {
@@ -781,9 +781,9 @@ before sending data to the context broker.
     },
     "場所": {
         "タイプ": "ジオプロパティ",
-        "値": {"タイプ": "Point", "座標": [13.5646, 52.5435]}
+        "値": { "タイプ": "Point", "座標": [13.5646, 52.5435] }
     },
-    "名前": {"タイプ": "プロパティ", "値": "Yuusui-en"}
+    "名前": { "タイプ": "プロパティ", "値": "Yuusui-en" }
 }
 ```
 
