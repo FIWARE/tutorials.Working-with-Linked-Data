@@ -813,7 +813,7 @@ Context Broker にデータを送信する前に、逆の展開/圧縮操作を�
 
 #### Video: JSON-LD 圧縮と展開 (Compaction & Expansion)
 
-[![](http://img.youtube.com/vi/Tm3fD89dqRE/0.jpg)](https://www.youtube.com/watch?v=Tm3fD89dqRE "JSON-LD Compaction & Expansion")
+[![](https://fiware.github.io/tutorials.Step-by-Step/img/video-logo.png)](https://www.youtube.com/watch?v=Tm3fD89dqRE "JSON-LD Compaction & Expansion")
 
 上の画像をクリックして、`@context` と相互運用性に関するビデオ JSON-LD の圧縮と展開をご覧ください。
 
