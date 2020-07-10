@@ -46,7 +46,7 @@
         -   [商品を在庫している棚を探す](#find-a-shelf-stocking-a-product)
         -   [棚の状態を更新](#update-the-state-of-a-shelf)
     -   [リンクト・データを使用した相互運用性](#interoperability-using-linked-data)
-        -   [代替スキーマを使用したエンティティの作成](#creating-an-entity-using an-alternate-schema)
+        -   [代替スキーマを使用したエンティティの作成](#creating-an-entity-using-an-alternate-schema)
         -   [デフォルトのスキーマを使用したエンティティの読み取り](#reading-an-entity-using-the-default-schema)
         -   [代替スキーマを使用したエンティティの読み取り](#reading-an-entity-using-an-alternate-schema)
         -   [エンティティ展開/圧縮 (Expansion/Compaction) の適用](#applying-entity-expansioncompaction)
@@ -576,7 +576,7 @@ Core NGSI-LD の `@context` は、`name` = `https://uri.etsi.org/ngsi-ld/name` �
 2つのシステムがデータ交換用の一意の URI の**共通**システムに同意できる場合、それらのドメイン内でこれらの値をローカルで
 自由に再解釈できます。
 
-<a name="creating-an-entity-using an-alternate-schema"></a>
+<a name="creating-an-entity-using-an-alternate-schema"></a>
 ### 代替スキーマを使用したエンティティの作成
 
 代替の日本語 JSON-LD `@context` ファイルが作成され、外部サーバに公開されました。このファイルは、
@@ -586,7 +586,7 @@ Core NGSI-LD の `@context` は、`name` = `https://uri.etsi.org/ngsi-ld/name` �
 > **注**: 比較のために、標準のチュートリアル JSON-LD `@context` ファイルはこちらにあります。:
 > `https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld`
 
-#### 1 リクエスト:
+#### :one: リクエスト:
 
 データ・エンティティを作成する際、日本語の JSON-LD `@context` にマッピングされたすべての URI の短縮名は、リクエストの
 ペイロードで自由に使用できます。
@@ -637,7 +637,7 @@ JSON-LD `@context` ファイルは、**Building** エンティティに使用さ
 `@context` で指定された短縮名を使用して返すことができます。これは、`Link` ヘッダは、tutorial JSON-LD の`@context`
 ファイルを指しています。
 
-#### 2 リクエスト:
+#### :two: リクエスト:
 
 ```bash
 curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Building:store005' \
@@ -688,7 +688,7 @@ curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Building:s
 既存の **Building** エンティティを読み取り、日本語の `@context` を適用できます。使用する `@context` は、`Link` ヘッダで
 提供されます。
 
-#### 3 リクエスト:
+#### :three: リクエスト:
 
 ```bash
 curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Building:store003' \
@@ -697,11 +697,6 @@ curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Building:s
 ```
 
 #### レスポンス:
-
-The response is mixed - it uses attribute names and enumerations defined in `japanese-context.jsonld` with some
-exceptions. NGSI-LD **is not** JSON-LD, in that the core context is always applied after the contexts received in the
-`Link` header. Since `name` and `location` are reserved attribute names, they are supplied using the default core
-context.
 
 レスポンスはミックスされています - いくつかの例外を除き、`japanese-context.jsonld` で定義された属性名と列挙を使用
 します。NGSI-LD は JSON-lD **ではありません**。コア・コンテキスト (Core Context) は常に、`Link` ヘッダで受信された
@@ -772,9 +767,9 @@ function translateRequest(req, res) {
 }
 ```
 
-#### 4 リクエスト:
+#### :four: リクエスト:
 
-リクエストを Context Broker に転送してから展開/圧縮操作を適用する `/japanesei` エンドポイントが作成されました。
+リクエストを Context Broker に転送してから展開/圧縮操作を適用する `/japanese` エンドポイントが作成されました。
 
 ```bash
 curl -L -X GET 'http://localhost:3000/japanese/ngsi-ld/v1/entities/urn:ngsi-ld:Building:store005' \
@@ -812,7 +807,7 @@ Context Broker にデータを送信する前に、逆の展開/圧縮操作を�
 }
 ```
 
-#### Video: JSON-LD 圧縮と展開 (Compaction & Expansion)
+#### :arrow_forward: Video: JSON-LD 圧縮と展開 (Compaction & Expansion)
 
 [![](https://fiware.github.io/tutorials.Step-by-Step/img/video-logo.png)](https://www.youtube.com/watch?v=Tm3fD89dqRE "JSON-LD Compaction & Expansion")
 
