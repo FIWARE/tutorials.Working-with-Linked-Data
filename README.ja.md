@@ -233,6 +233,7 @@ MongoDB および Orion Context Broker の構成情報は、[以前のチュー�
 ```bash
 git clone https://github.com/FIWARE/tutorials.Working-with-Linked-Data.git
 cd tutorials.Working-with-Linked-Data
+git checkout NGSI-v2
 
 ./services orion
 ```
