@@ -223,7 +223,7 @@ The configuration information for MongoDB and the Orion Context Broker has been 
 # Start Up
 
 All services can be initialised from the command-line by running the
-[services](https://github.com/FIWARE/tutorials.Relationships-Linked-Data/blob/master/services) Bash script provided
+[services](https://github.com/FIWARE/tutorials.Relationships-Linked-Data/blob/NGSI-v2/services) Bash script provided
 within the repository. Please clone the repository and create the necessary images by running the commands as shown:
 
 ```bash

@@ -226,7 +226,7 @@ MongoDB および Orion Context Broker の構成情報は、[以前のチュー�
 # スタートアップ
 
 すべてのサービスは、リポジトリ内で提供される
-[services](https://github.com/FIWARE/tutorials.Working-with-Linked-Data/blob/master/services) Bash スクリプトを
+[services](https://github.com/FIWARE/tutorials.Working-with-Linked-Data/blob/NGSI-v2/services) Bash スクリプトを
 実行して、コマンドラインから初期化できます。以下のようにコマンドを実行して、リポジトリのクローンを作成して必要な
 イメージを作成してください :
 
