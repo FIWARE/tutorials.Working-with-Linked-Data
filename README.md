@@ -367,7 +367,6 @@ parameter.
 const building = await ngsiLD.readEntity(
     req.params.storeId,
     {
-        type: "Building",
         options: "keyValues",
         attrs: "furniture"
     },
@@ -381,7 +380,6 @@ The equivalent cUrl statement can be seen below:
 curl -G -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Building:store001/' \
 -H 'Link: <https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
 -H 'Content-Type: application/ld+json' \
--d 'type=Building' \
 -d 'options=keyValues' \
 -d 'attrs=furniture' \
 ```
