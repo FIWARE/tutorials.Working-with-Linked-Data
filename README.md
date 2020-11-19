@@ -23,10 +23,10 @@ available.
 
 -   このチュートリアルは[日本語](README.ja.md)でもご覧いただけます。
 
-
-:warning:  **Note:** This tutorial is designed for **NGSI-v2** developers looking to switch or upgrade systems to **NGSI-LD**, if you
-are building a linked data system from scratch or you are not already familiar with **NGSI-v2** then it is recommmended that you
-look directly at the [NGSI-LD developers tutorial](https://ngsi-ld-tutorials.readthedocs.io/) documentation.
+:warning: **Note:** This tutorial is designed for **NGSI-v2** developers looking to switch or upgrade systems to
+**NGSI-LD**, if you are building a linked data system from scratch or you are not already familiar with **NGSI-v2** then
+it is recommmended that you look directly at the
+[NGSI-LD developers tutorial](https://ngsi-ld-tutorials.readthedocs.io/) documentation.
 
 ## Contents
 
@@ -436,7 +436,7 @@ further. The code below extracts the IDs for later use.
 ```javascript
 const stockedProducts = [];
 
-productsList = _.groupBy(productsList, e => {
+productsList = _.groupBy(productsList, (e) => {
     return e.stocks;
 });
 _.forEach(productsList, (value, key) => {
@@ -737,14 +737,14 @@ function translateRequest(req, res) {
         qs: req.query,
         json: true
     })
-        .then(async function(cbResponse) {
+        .then(async function (cbResponse) {
             cbResponse["@context"] = coreContext;
             const expanded = await jsonld.expand(cbResponse);
             const compacted = await jsonld.compact(expanded, japaneseContext);
             delete compacted["@context"];
             return res.send(compacted);
         })
-        .catch(function(err) {
+        .catch(function (err) {
             return res.send(err);
         });
 }
