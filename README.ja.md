@@ -341,7 +341,7 @@ function readEntity(entityId, opts, headers = {}) {
 ```console
 curl -G -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Building:store001/' \
 -H 'Link: <https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
--H 'Content-Type: application/ld+json' \
+-H 'Content-Type: application/json' \
 -d 'options=keyValues'
 ```
 
@@ -389,7 +389,7 @@ const building = await ngsiLD.readEntity(
 ```console
 curl -G -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Building:store001/' \
 -H 'Link: <https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
--H 'Content-Type: application/ld+json' \
+-H 'Content-Type: application/json' \
 -d 'options=keyValues' \
 -d 'attrs=furniture' \
 ```
@@ -433,7 +433,7 @@ function listEntities(opts, headers = {}) {
 ```console
 curl -G -X GET 'http://localhost:1026/ngsi-ld/v1/entities/' \
 -H 'Link: <https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
--H 'Content-Type: application/ld+json' \
+-H 'Content-Type: application/json' \
 -H 'Accept: application/json' \
 -d 'type=Shelf' \
 -d 'options=keyValues' \
@@ -478,7 +478,7 @@ let productsInStore = await ngsiLD.listEntities(
 ```console
 curl -G -X GET 'http://localhost:1026/ngsi-ld/v1/entities/' \
 -H 'Link: <https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
--H 'Content-Type: application/ld+json' \
+-H 'Content-Type: application/json' \
 -H 'Accept: application/json' \
 -d 'type=Product' \
 -d 'options=keyValues' \
@@ -517,7 +517,7 @@ const shelf = await ngsiLD.listEntities(
 ```console
 curl -G -X GET 'http://localhost:1026/ngsi-ld/v1/entities/' \
 -H 'Link: <https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
--H 'Content-Type: application/ld+json' \
+-H 'Content-Type: application/json' \
 -H 'Accept: application/json' \
 -d 'type=Shelf' \
 -d 'options=keyValues' \
@@ -643,7 +643,7 @@ JSON-LD `@context` ファイルは、**Building** エンティティに使用さ
 
 ```bash
 curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Building:store005' \
--H 'Content-Type: application/ld+json' \
+-H 'Content-Type: application/json' \
 -H 'Link: <https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"'
 ```
 
