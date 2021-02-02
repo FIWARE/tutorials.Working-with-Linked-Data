@@ -96,7 +96,6 @@ case "${command}" in
 	"help")
         echo "usage: services [create|orion|scorpio|stellio|stop]"
         ;;
-    "start")
     "orion")
 		stoppingContainers
 		echo -e "Starting three containers \033[1;34mOrion-LD\033[0m, \033[1mTutorial\033[0m and a \033[1mMongoDB\033[0m database."
@@ -137,13 +136,13 @@ case "${command}" in
 		stoppingContainers
 		;;
 	"start")
-		./services mongodb
+		./services orion
 		;;
 	"create")
 		echo "Pulling Docker images"
 		docker-compose --log-level ERROR -f docker-compose/scorpio-aaio.yml pull
 		docker-compose --log-level ERROR -f docker-compose/orion-ld.yml pull
-		docker-compose --log-level ERROR -f docker-compose/stellio.yml 
+		docker-compose --log-level ERROR -f docker-compose/stellio.yml pull
 		;;
 	*)
 		echo "Command not Found."

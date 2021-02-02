@@ -19,7 +19,7 @@
 version: "3.5"
 services:
 
-    zookeeper:
+  zookeeper:
     image: confluentinc/cp-zookeeper:5.4.1
     container_name: stellio-zookeeper
     ports:
@@ -148,7 +148,7 @@ services:
     hostname: tutorial
     container_name: fiware-tutorial
     depends_on:
-      - orion
+      - entity-service
     networks:
       default:
         aliases:
