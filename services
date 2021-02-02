@@ -96,6 +96,7 @@ case "${command}" in
 	"help")
         echo "usage: services [create|orion|scorpio|stellio|stop]"
         ;;
+    "start")
     "orion")
 		stoppingContainers
 		echo -e "Starting three containers \033[1;34mOrion-LD\033[0m, \033[1mTutorial\033[0m and a \033[1mMongoDB\033[0m database."
@@ -134,6 +135,9 @@ case "${command}" in
 		;;
 	"stop")
 		stoppingContainers
+		;;
+	"start")
+		./services mongodb
 		;;
 	"create")
 		echo "Pulling Docker images"
