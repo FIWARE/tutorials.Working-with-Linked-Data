@@ -323,7 +323,7 @@ function readEntity(entityId, opts, headers = {}) {
         url: BASE_PATH + "/entities/" + entityId,
         method: "GET",
         headers,
-        json: true
+        json: true,
     });
 }
 ```
@@ -368,7 +368,7 @@ const building = await ngsiLD.readEntity(
     req.params.storeId,
     {
         options: "keyValues",
-        attrs: "furniture"
+        attrs: "furniture",
     },
     ngsiLD.setHeaders(req.session.access_token, LinkHeader)
 );
@@ -397,7 +397,7 @@ let productsList = await ngsiLD.listEntities(
         type: "Shelf",
         options: "keyValues",
         attrs: "stocks,numberOfItems",
-        id: building.furniture.join(",")
+        id: building.furniture.join(","),
     },
     ngsiLD.setHeaders(req.session.access_token, LinkHeader)
 );
@@ -412,7 +412,7 @@ function listEntities(opts, headers = {}) {
         url: BASE_PATH + "/entities",
         method: "GET",
         headers,
-        json: true
+        json: true,
     });
 }
 ```
@@ -436,7 +436,7 @@ further. The code below extracts the IDs for later use.
 ```javascript
 const stockedProducts = [];
 
-productsList = _.groupBy(productsList, e => {
+productsList = _.groupBy(productsList, (e) => {
     return e.stocks;
 });
 _.forEach(productsList, (value, key) => {
@@ -455,7 +455,7 @@ let productsInStore = await ngsiLD.listEntities(
         type: "Product",
         options: "keyValues",
         attrs: "name,price",
-        id: stockedProducts.join(",")
+        id: stockedProducts.join(","),
     },
     headers
 );
@@ -492,7 +492,7 @@ const shelf = await ngsiLD.listEntities(
         options: "keyValues",
         attrs: "stocks,numberOfItems",
         q: 'numberOfItems>0;locatedIn=="' + req.body.storeId + '";stocks=="' + req.body.productId + '"',
-        limit: 1
+        limit: 1,
     },
     headers
 );
@@ -532,7 +532,7 @@ function updateAttribute(entityId, body, headers = {}) {
         method: "PATCH",
         body,
         headers,
-        json: true
+        json: true,
     });
 }
 ```
@@ -735,16 +735,16 @@ function translateRequest(req, res) {
         method: req.method,
         headers: req.headers,
         qs: req.query,
-        json: true
+        json: true,
     })
-        .then(async function(cbResponse) {
+        .then(async function (cbResponse) {
             cbResponse["@context"] = coreContext;
             const expanded = await jsonld.expand(cbResponse);
             const compacted = await jsonld.compact(expanded, japaneseContext);
             delete compacted["@context"];
             return res.send(compacted);
         })
-        .catch(function(err) {
+        .catch(function (err) {
             return res.send(err);
         });
 }
