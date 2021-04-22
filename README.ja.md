@@ -1,5 +1,5 @@
 [![FIWARE Banner](https://fiware.github.io/tutorials.Working-with-Linked-Data/img/fiware.png)](https://www.fiware.org/developers)
-[![NGSI LD](https://img.shields.io/badge/NGSI-LD-d6604d.svg)](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.03.01_60/gs_cim009v010301p.pdf)
+[![NGSI LD](https://img.shields.io/badge/NGSI-LD-d6604d.svg)](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.04.01_60/gs_cim009v010401p.pdf)
 
 [![FIWARE Core Context Management](https://nexus.lab.fiware.org/repository/raw/public/badges/chapters/core.svg)](https://github.com/FIWARE/catalogue/blob/master/core/README.md)
 [![License: MIT](https://img.shields.io/github/license/fiware/tutorials.Relationships-Linked-Data.svg)](https://opensource.org/licenses/MIT)
@@ -10,7 +10,7 @@
 このチュートリアルでは、FIWARE ユーザに、**リンクト・データ**に基づいてシステムを設計および設計し、リンクト・データの
 コンテキストをプログラムで変更する方法を学習します。このチュートリアルは、同等の
 [NGSI-v2 チュートリアル](https://github.com/FIWARE/tutorials.Accessing-Context/)から得られた知識を拡張し、コンテキスト・データ
-を取得および変更するために、[NGSI-LD](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.03.01_60/gs_cim009v010301p.pdf)
+を取得および変更するために、[NGSI-LD](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.04.01_60/gs_cim009v010401p.pdf)
 対応 [Node.js](https://nodejs.org/) [Express](https://expressjs.com/) アプリケーションでコードを記述する方法をユーザが理解
 できるようにします。これにより、コマンドラインを使用して cUrl コマンドを呼び出す必要がなくなります。
 
@@ -173,7 +173,7 @@ NGSI-LD インターフェースは、[Orion Context Broker](https://fiware-orio
 Context Provider NGSI proxy  も追加されました。 コンテキストを視覚化し、対話するために、簡単な Express
 アプリケーションを追加します。 したがって、アーキテクチャは次の3つの要素で構成されます :
 
--   [NGSI-LD](https://forge.etsi.org/swagger/ui/?url=https://forge.etsi.org/gitlab/NGSI-LD/NGSI-LD/raw/master/spec/updated/full_api.json)
+-   [NGSI-LD](https://forge.etsi.org/swagger/ui/?url=https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/spec/updated/generated/full_api.json)
     を使ってリクエストを受け取る [Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/)
 -   基礎となる [MongoDB](https://www.mongodb.com/) データベース :
     -   データ・エンティティ、サブスクリプション、レジストレーションなどのコンテキスト・データ情報を保持するために
