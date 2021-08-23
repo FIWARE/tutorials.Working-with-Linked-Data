@@ -141,7 +141,7 @@ case "${command}" in
 		;;
 	"start")
 		export $(cat .env | grep "#" -v)
-		./services orion
+		./services orion $2
 		;;
 	"create")
 		export $(cat .env | grep "#" -v)
