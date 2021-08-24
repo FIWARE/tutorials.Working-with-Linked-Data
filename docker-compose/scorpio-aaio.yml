@@ -97,14 +97,14 @@ services:
   # Tutorial displays a web app to manipulate the context directly
   tutorial:
     image: fiware/tutorials.context-provider
-    hostname: tutorial
+    hostname: iot-sensors
     container_name: fiware-tutorial
     depends_on:
       - scorpio
     networks:
       default:
         aliases:
-          - iot-sensors
+          - tutorial
           - context-provider
     expose:
       - "${TUTORIAL_APP_PORT}" # localhost:3000
