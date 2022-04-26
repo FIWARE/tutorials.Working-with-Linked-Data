@@ -4,8 +4,8 @@
 [![FIWARE Core Context Management](https://nexus.lab.fiware.org/repository/raw/public/badges/chapters/core.svg)](https://github.com/FIWARE/catalogue/blob/master/core/README.md)
 [![License: MIT](https://img.shields.io/github/license/fiware/tutorials.Relationships-Linked-Data.svg)](https://opensource.org/licenses/MIT)
 [![Support badge](https://img.shields.io/badge/tag-fiware-orange.svg?logo=stackoverflow)](https://stackoverflow.com/questions/tagged/fiware)
-[![JSON LD](https://img.shields.io/badge/JSON--LD-1.1-f06f38.svg)](https://w3c.github.io/json-ld-syntax/)
-<br/> [![Documentation](https://img.shields.io/readthedocs/fiware-tutorials.svg)](https://fiware-tutorials.rtfd.io)
+[![JSON LD](https://img.shields.io/badge/JSON--LD-1.1-f06f38.svg)](https://w3c.github.io/json-ld-syntax/) <br/>
+[![Documentation](https://img.shields.io/readthedocs/fiware-tutorials.svg)](https://fiware-tutorials.rtfd.io)
 
 このチュートリアルでは、FIWARE ユーザに、**リンクト・データ**に基づいてシステムを設計および設計し、リンクト・データの
 コンテキストをプログラムで変更する方法を学習します。このチュートリアルは、同等の
@@ -447,7 +447,7 @@ curl -G -X GET 'http://localhost:1026/ngsi-ld/v1/entities/' \
 ```javascript
 const stockedProducts = [];
 
-productsList = _.groupBy(productsList, e => {
+productsList = _.groupBy(productsList, (e) => {
     return e.stocks;
 });
 _.forEach(productsList, (value, key) => {
@@ -694,7 +694,7 @@ curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Building:s
 
 ```bash
 curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Building:store003' \
--H 'Content-Type: application/ld+json' \
+-H 'Content-Type: application/json' \
 -H 'Link: <https://fiware.github.io/tutorials.Step-by-Step/japanese-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"'
 ```
 
@@ -756,7 +756,7 @@ function translateRequest(req, res) {
         qs: req.query,
         json: true
     })
-        .then(async function(cbResponse) {
+        .then(async function (cbResponse) {
             cbResponse["@context"] = coreContext;
             const expanded = await jsonld.expand(cbResponse);
             const compacted = await jsonld.compact(expanded, japaneseContext);
