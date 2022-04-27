@@ -503,7 +503,7 @@ The equivalent cUrl statement can be seen below:
 ```console
 curl -G -X GET 'http://localhost:1026/ngsi-ld/v1/entities/' \
 -H 'Link: <https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
--H 'Content-Type: application/ldjson' \
+-H 'Content-Type: application/json' \
 -H 'Accept: application/json' \
 -d 'type=Shelf' \
 -d 'options=keyValues' \
