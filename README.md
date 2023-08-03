@@ -197,14 +197,14 @@ tutorial:
     networks:
         - default
     expose:
-        - "3000"
+        - '3000'
     ports:
-        - "3000:3000"
+        - '3000:3000'
     environment:
-        - "DEBUG=tutorial:*"
-        - "WEB_APP_PORT=3000"
-        - "NGSI_VERSION=ngsi-ld"
-        - "CONTEXT_BROKER=http://orion:1026/ngsi-ld/v1"
+        - 'DEBUG=tutorial:*'
+        - 'WEB_APP_PORT=3000'
+        - 'NGSI_VERSION=ngsi-ld'
+        - 'CONTEXT_BROKER=http://orion:1026/ngsi-ld/v1'
 ```
 
 The `tutorial` container is driven by environment variables as shown:
@@ -264,7 +264,7 @@ define location of the data models JSON-LD context as
 `https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld`.
 
 ```javascript
-const ngsiLD = require("../../lib/ngsi-ld");
+const ngsiLD = require('../../lib/ngsi-ld');
 
 const LinkHeader =
     '<https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json">';
@@ -280,11 +280,11 @@ necessary HTTP call in an asynchronous fashion:
 async function displayStore(req, res) {
     const store = await ngsiLD.readEntity(
         req.params.storeId,
-        { options: "keyValues" },
+        { options: 'keyValues' },
         ngsiLD.setHeaders(req.session.access_token, LinkHeader)
     );
 
-    return res.render("store", { title: store.name, store });
+    return res.render('store', { title: store.name, store });
 }
 ```
 
@@ -300,13 +300,13 @@ OAuth2 security.
 function setHeaders(accessToken, link, contentType) {
     const headers = {};
     if (accessToken) {
-        headers["X-Auth-Token"] = accessToken;
+        headers['X-Auth-Token'] = accessToken;
     }
     if (link) {
         headers.Link = link;
     }
     if (contentType) {
-        headers["Content-Type"] = contentType || "application/ld+json";
+        headers['Content-Type'] = contentType || 'application/ld+json';
     }
     return headers;
 }
@@ -316,13 +316,13 @@ Within the `lib/ngsi-ld.js` library file, the `BASE_PATH` defines the location o
 data entity is simply a wrapper around an asynchronous HTTP GET request passing the appropriate headers
 
 ```javascript
-const BASE_PATH = process.env.CONTEXT_BROKER || "http://localhost:1026/ngsi-ld/v1";
+const BASE_PATH = process.env.CONTEXT_BROKER || 'http://localhost:1026/ngsi-ld/v1';
 
 function readEntity(entityId, opts, headers = {}) {
     return request({
         qs: opts,
-        url: BASE_PATH + "/entities/" + entityId,
-        method: "GET",
+        url: BASE_PATH + '/entities/' + entityId,
+        method: 'GET',
         headers,
         json: true
     });
@@ -368,8 +368,8 @@ parameter.
 const building = await ngsiLD.readEntity(
     req.params.storeId,
     {
-        options: "keyValues",
-        attrs: "furniture"
+        options: 'keyValues',
+        attrs: 'furniture'
     },
     ngsiLD.setHeaders(req.session.access_token, LinkHeader)
 );
@@ -395,10 +395,10 @@ parameter. The `id` is just a comma separated list taken from the request above.
 ```javascript
 let productsList = await ngsiLD.listEntities(
     {
-        type: "Shelf",
-        options: "keyValues",
-        attrs: "stocks,numberOfItems",
-        id: building.furniture.join(",")
+        type: 'Shelf',
+        options: 'keyValues',
+        attrs: 'stocks,numberOfItems',
+        id: building.furniture.join(',')
     },
     ngsiLD.setHeaders(req.session.access_token, LinkHeader)
 );
@@ -410,8 +410,8 @@ let productsList = await ngsiLD.listEntities(
 function listEntities(opts, headers = {}) {
     return request({
         qs: opts,
-        url: BASE_PATH + "/entities",
-        method: "GET",
+        url: BASE_PATH + '/entities',
+        method: 'GET',
         headers,
         json: true
     });
@@ -453,10 +453,10 @@ using the `id` parameter. The `id` is just a comma separated list taken from the
 ```javascript
 let productsInStore = await ngsiLD.listEntities(
     {
-        type: "Product",
-        options: "keyValues",
-        attrs: "name,price",
-        id: stockedProducts.join(",")
+        type: 'Product',
+        options: 'keyValues',
+        attrs: 'name,price',
+        id: stockedProducts.join(',')
     },
     headers
 );
@@ -489,9 +489,9 @@ _relationships_ with both **Building** and **Product**.
 ```javascript
 const shelf = await ngsiLD.listEntities(
     {
-        type: "Shelf",
-        options: "keyValues",
-        attrs: "stocks,numberOfItems",
+        type: 'Shelf',
+        options: 'keyValues',
+        attrs: 'stocks,numberOfItems',
         q: 'numberOfItems>0;locatedIn=="' + req.body.storeId + '";stocks=="' + req.body.productId + '"',
         limit: 1
     },
@@ -519,7 +519,7 @@ To update an entity a PATCH request is made using the `id` of the **Shelf** retu
 const count = shelf[0].numberOfItems - 1;
 await ngsiLD.updateAttribute(
     shelf[0].id,
-    { numberOfItems: { type: "Property", value: count } },
+    { numberOfItems: { type: 'Property', value: count } },
     ngsiLD.setHeaders(req.session.access_token, LinkHeader)
 );
 ```
@@ -529,8 +529,8 @@ The asynchronous PATCH request is found in the `updateAttribute()` function with
 ```javascript
 function updateAttribute(entityId, body, headers = {}) {
     return request({
-        url: BASE_PATH + "/entities/" + entityId + "/attrs",
-        method: "PATCH",
+        url: BASE_PATH + '/entities/' + entityId + '/attrs',
+        method: 'PATCH',
         body,
         headers,
         json: true
@@ -727,8 +727,8 @@ response to retrieve the data in a fully converted fashion for local use.
 JSON-LD libraries already exist to do this work.
 
 ```javascript
-const coreContext = require("./jsonld-context/ngsi-ld.json");
-const japaneseContext = require("./jsonld-context/japanese.json");
+const coreContext = require('./jsonld-context/ngsi-ld.json');
+const japaneseContext = require('./jsonld-context/japanese.json');
 
 function translateRequest(req, res) {
     request({
@@ -739,10 +739,10 @@ function translateRequest(req, res) {
         json: true
     })
         .then(async function (cbResponse) {
-            cbResponse["@context"] = coreContext;
+            cbResponse['@context'] = coreContext;
             const expanded = await jsonld.expand(cbResponse);
             const compacted = await jsonld.compact(expanded, japaneseContext);
-            delete compacted["@context"];
+            delete compacted['@context'];
             return res.send(compacted);
         })
         .catch(function (err) {
@@ -794,7 +794,7 @@ payload before sending data to the context broker.
 
 #### :arrow_forward: Video: JSON-LD Compaction & Expansion
 
-[![](https://fiware.github.io/tutorials.Step-by-Step/img/video-logo.png)](https://www.youtube.com/watch?v=Tm3fD89dqRE "JSON-LD Compaction & Expansion")
+[![](https://fiware.github.io/tutorials.Step-by-Step/img/video-logo.png)](https://www.youtube.com/watch?v=Tm3fD89dqRE 'JSON-LD Compaction & Expansion')
 
 Click on the image above to watch a video JSON-LD expansion and compaction with reference to the `@context`.
 
