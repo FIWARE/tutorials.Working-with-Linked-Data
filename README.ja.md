@@ -589,7 +589,7 @@ Core NGSI-LD の `@context` は、`name` = `https://uri.etsi.org/ngsi-ld/name` �
 > **注**: 比較のために、標準のチュートリアル JSON-LD `@context` ファイルはこちらにあります。:
 > `https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld`
 
-#### :one: リクエスト:
+#### 1️⃣ リクエスト:
 
 データ・エンティティを作成する際、日本語の JSON-LD `@context` にマッピングされたすべての URI の短縮名は、リクエストの
 ペイロードで自由に使用できます。
@@ -640,7 +640,7 @@ JSON-LD `@context` ファイルは、**Building** エンティティに使用さ
 `@context` で指定された短縮名を使用して返すことができます。これは、`Link` ヘッダは、tutorial JSON-LD の`@context`
 ファイルを指しています。
 
-#### :two: リクエスト:
+#### 2️⃣ リクエスト:
 
 ```bash
 curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Building:store005' \
@@ -691,7 +691,7 @@ curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Building:s
 既存の **Building** エンティティを読み取り、日本語の `@context` を適用できます。使用する `@context` は、`Link` ヘッダで
 提供されます。
 
-#### :three: リクエスト:
+#### 3️⃣ リクエスト:
 
 ```bash
 curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Building:store003' \
@@ -770,7 +770,7 @@ function translateRequest(req, res) {
 }
 ```
 
-#### :four: リクエスト:
+#### 4️⃣ リクエスト:
 
 リクエストを Context Broker に転送してから展開/圧縮操作を適用する `/japanese` エンドポイントが作成されました。
 

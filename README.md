@@ -131,7 +131,8 @@ application runs on the following URLs:
 -   `http://localhost:3000/app/store/urn:ngsi-ld:Building:store003`
 -   `http://localhost:3000/app/store/urn:ngsi-ld:Building:store004`
 
-> :information_source: **Tip** Additionally, you can also watch the status of recent requests yourself by following the
+> [!TIP]
+> Additionally, you can also watch the status of recent requests yourself by following the
 > container logs or viewing information on `localhost:3000/app/monitor` on a web browser.
 >
 > ![FIWARE Monitor](https://fiware.github.io/tutorials.Working-with-Linked-Data/img/monitor.png)
@@ -569,10 +570,11 @@ An alternative Japanese JSON-LD `@context` file has been created and published t
 found here: `https://fiware.github.io/tutorials.Step-by-Step/japanese-context.jsonld`. Alternate data mappings can be
 found for all attribute names used within the tutorials.
 
-> :information_source: **Note**: For comparison the standard tutorial JSON-LD `@context` file can be found here:
+> [!NOTE]
+>  For comparison the standard tutorial JSON-LD `@context` file can be found here:
 > `https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld`
 
-#### :one: Request:
+#### 1️⃣ Request:
 
 When creating a data entity, short names for all of the URIs mapped in the Japanese JSON-LD `@context` can be used
 freely in the payload of the request.
@@ -623,7 +625,7 @@ Therefore it is possible to request the new **Building** (created using the Japa
 using the short names specified in the standard tutorial JSON-LD `@context`, this is done by supplying the `Link` header
 is pointing to the tutorial JSON-LD `@context` file.
 
-#### :two: Request:
+#### 2️⃣ Request:
 
 ```console
 curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Building:store005' \
@@ -672,7 +674,7 @@ With one exception, there is no hierarchy defined within NGSI-LD `@context` file
 possible to read any of the existing **Building** entities and apply the Japanese `@context`. The `@context` to used is
 supplied in the `Link` header.
 
-#### :three: Request:
+#### 3️⃣ Request:
 
 ```console
 curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Building:store003' \
@@ -751,7 +753,7 @@ function translateRequest(req, res) {
 }
 ```
 
-#### :four: Request:
+#### 4️⃣ Request:
 
 A `/japanese` endpoint has been created which forwards a request to the context broker and then applies an
 expansion/compaction operation.
