@@ -806,4 +806,4 @@ Click on the image above to watch a video JSON-LD expansion and compaction with 
 
 ## License
 
-[MIT](LICENSE) © 2020-2023 FIWARE Foundation e.V.
+[MIT](LICENSE) © 2020-2024 FIWARE Foundation e.V.
