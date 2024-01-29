@@ -1,9 +1,11 @@
 {
 	"info": {
 		"_postman_id": "0bffb109-7af9-4ce3-b269-a53cb1e5c8e8",
-		"name": "FIWARE Working with Linked Data",
-		"description": "[![FIWARE Core Context Management](https://nexus.lab.fiware.org/repository/raw/public/badges/chapters/core.svg)](https://github.com/FIWARE/catalogue/blob/master/core/README.md)\n[![NGSI LD](https://img.shields.io/badge/NGSI-linked_data-red.svg)](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.03.01_60/gs_cim009v010301p.pdf)\n\nThis tutorial teaches FIWARE users how to architect and design a system based on **linked data** and to alter linked\ndata context programmatically. The tutorial extends the knowledge gained from the equivalent\n[NGSI-v2 tutorial](https://github.com/FIWARE/tutorials.Accessing-Context/) and enables a user understand how to write\ncode in an [NGSI-LD](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.03.01_60/gs_cim009v010301p.pdf) capable\n[Node.js](https://nodejs.org/) [Express](https://expressjs.com/) application in order to retrieve and alter context\ndata. This removes the need to use the command-line to invoke cUrl commands.\n\nThe tutorial is mainly concerned with discussing code written in Node.js, however some of the results can be checked by\nmaking [cUrl](https://ec.haxx.se/) commands.\n\nThe `docker-compose` files for this tutorial can be found on GitHub: \n\n![GitHub](https://fiware.github.io/tutorials.Working-with-Linked-Data/icon/GitHub-Mark-32px.png) [FIWARE 603: Traversing Linked Data Programmatically](https://github.com/Fiware/tutorials.Working-with-Linked-Data)\n\n\n# Working with Linked Data Entities\n\n> -   “This is the house that Jack built.\n> -   This is the malt that lay in the house that Jack built.\n> -   This is the rat that ate the malt<br/> That lay in the house that Jack built.\n> -   This is the cat<br/> That killed the rat that ate the malt<br/> That lay in the house that Jack built.\n> -   This is the dog that chased the cat<br/> That killed the rat that ate the malt<br/> That lay in the house that\n>     Jack built.”\n>\n> ― This Is the House That Jack Built, Traditional English Nursery Rhyme\n\nNSGI-LD is an evolution of NGSI-v2, so it should not be surprising that Smart solutions based on NSGI-LD will need to\ncover the same basic scenarios as outlined in the previous NGSI-v2\n[tutorial](https://github.com/FIWARE/tutorials.Accessing-Context/) on programatic data access.\n\nNGSI-LD Linked data formalizes the structure of context entities to a greater degree, through restricting data\nattributes to be defined as either _Property_ attributes or _Relationship_ attributes only. This means that it is\npossible to traverse the context data graph with greater certainty when moving from one _Relationship_ to another. All\nthe context data entities within the system are defined by JSON-LD data models, which are formally defined by\nreferencing a context file, and this programatic definition should guarantee that the associated linked entity exists.\n\nThree basic data access scenarios for the supermaket are defined below:\n\n-   Reading Data - e.g. Give me all the data for the **Building** entity `urn:ngsi-ld:Building:store001`\n-   Aggregation - e.g. Combine the **Products** entities sold in **Building** `urn:ngsi-ld:Building:store001` and\n    display the goods for sale\n-   Altering context within the system - e.g. Make a sale of a product:\n    -   Update the daily sales records by the price of the **Product**\n    -   decrement the `numberOfItems` of the **Shelf** entity\n    -   Create a new Transaction Log record showing the sale has occurred\n    -   Raise an alert in the warehouse if less than 10 objects remain on sale\n    -   etc.\n\nFurther advanced scenarios will be covered in later tutorials\n\n## Linked Data Entities within a stock management system\n\nThe supermarket data created in the [previous tutorial](https://github.com/FIWARE/tutorials.Relationships-Linked-Data/)\nwill be loaded into the context broker. The existing relationships between the entities are defined as shown below:\n\n![](https://fiware.github.io/tutorials.Relationships-Linked-Data/img/entities-ld.png)\n\nThe **Building**, **Product**, **Shelf** and **StockOrder** entities will be used to display data on the frontend of our\ndemo application.\n\n## The teaching goal of this tutorial\n\nThe aim of this tutorial is to improve developer understanding of programmatic access of context data through defining\nand discussing a series of generic code examples covering common data access scenarios. For this purpose a simple\nNode.js Express application will be created.\n\nThe intention here is not to teach users how to write an application in Express - indeed any language could have been\nchosen. It is merely to show how **any** sample programming language could be used alter the context to achieve the\nbusiness logic goals.\n\nObviously, your choice of programming language will depend upon your own business needs - when reading the code below\nplease keep this in mind and substitute Node.js with your own programming language as appropriate.\n\n# Stock Management Frontend\n\nAll the code Node.js Express for the demo can be found within the `ngsi-ld` folder within the GitHub repository.\n[Stock Management example](https://github.com/FIWARE/tutorials.Step-by-Step/tree/master/context-provider). The\napplication runs on the following URLs:\n\n-   `http://localhost:3000/app/store/urn:ngsi-ld:Building:store001`\n-   `http://localhost:3000/app/store/urn:ngsi-ld:Building:store002`\n-   `http://localhost:3000/app/store/urn:ngsi-ld:Building:store003`\n-   `http://localhost:3000/app/store/urn:ngsi-ld:Building:store004`\n\n> :information_source: **Tip** Additionally, you can also watch the status of recent requests yourself by following the\n> container logs or viewing information on `localhost:3000/app/monitor` on a web browser.\n>\n> ![FIWARE Monitor](https://fiware.github.io/tutorials.Accessing-Context/img/monitor.png)\n\n# Prerequisites\n\n## Docker\n\nTo keep things simple all components will be run using [Docker](https://www.docker.com). **Docker** is a container\ntechnology which allows to different components isolated into their respective environments.\n\n-   To install Docker on Windows follow the instructions [here](https://docs.docker.com/docker-for-windows/)\n-   To install Docker on Mac follow the instructions [here](https://docs.docker.com/docker-for-mac/)\n-   To install Docker on Linux follow the instructions [here](https://docs.docker.com/install/)\n\n**Docker Compose** is a tool for defining and running multi-container Docker applications. A\n[YAML file](https://raw.githubusercontent.com/fiware/tutorials.Relationships-Linked-Data/master/docker-compose.yml) is\nused configure the required services for the application. This means all container services can be brought up in a\nsingle command. Docker Compose is installed by default as part of Docker for Windows and Docker for Mac, however Linux\nusers will need to follow the instructions found [here](https://docs.docker.com/compose/install/)\n\n## Cygwin\n\nWe will start up our services using a simple bash script. Windows users should download [cygwin](http://www.cygwin.com/)\nto provide a command-line functionality similar to a Linux distribution on Windows.\n\n# Architecture\n\nThe demo Supermarket application will send and receive NGSI-LD calls to a compliant context broker. Since the NGSI-LD\ninterface is available on an experimental version of the\n[Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/), the demo application will only make use of one\nFIWARE component.\n\nCurrently, the Orion Context Broker relies on open source [MongoDB](https://www.mongodb.com/) technology to keep\npersistence of the context data it holds. To request context data from external sources, a simple Context Provider NGSI\nproxy has also been added. To visualize and interact with the Context we will add a simple Express application\n\nTherefore, the architecture will consist of three elements:\n\n-   The [Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/) which will receive requests using\n    [NGSI](https://fiware.github.io/specifications/OpenAPI/ngsiv2)\n-   The underlying [MongoDB](https://www.mongodb.com/) database :\n    -   Used by the Orion Context Broker to hold context data information such as data entities, subscriptions and\n        registrations\n-   The **Stock Management Frontend** which will:\n    -   Display store information\n    -   Show which products can be bought at each store\n    -   Allow users to \"buy\" products and reduce the stock count.\n\nSince all interactions between the elements are initiated by HTTP requests, the entities can be containerized and run\nfrom exposed ports.\n\n![](https://fiware.github.io/tutorials.Accessing-Context/img/architecture.png)\n\nThe necessary configuration information for the **Context Provider NGSI proxy** can be seen in the services section the\nof the associated `docker-compose.yml` file:\n\n```yaml\ntutorial:\n    image: quay.io/fiware/tutorials.context-provider\n    hostname: context-provider\n    container_name: fiware-tutorial\n    networks:\n        - default\n    expose:\n        - \"3000\"\n    ports:\n        - \"3000:3000\"\n    environment:\n        - \"DEBUG=tutorial:*\"\n        - \"WEB_APP_PORT=3000\"\n        - \"NGSI_VERSION=ngsi-ld\"\n        - \"CONTEXT_BROKER=http://orion:1026/ngsi-ld/v1\"\n```\n\nThe `tutorial` container is driven by environment variables as shown:\n\n| Key            | Value                          | Description                                                               |\n| -------------- | ------------------------------ | ------------------------------------------------------------------------- |\n| DEBUG          | `tutorial:*`                   | Debug flag used for logging                                               |\n| WEB_APP_PORT   | `3000`                         | Port used by the Context Provider NGSI proxy and web-app for viewing data |\n| CONTEXT_BROKER | `http://orion:1026/ngsi-ld/v1` | URL of the context broker to connect to update context                    |\n\nThe other `tutorial` container configuration values described in the YAML file are not used in this section of the\ntutorial.\n\nThe configuration information for MongoDB and the Orion Context Broker has been described in a\n[previous tutorial](https://github.com/FIWARE/tutorials.Relationships-Linked-Data/)\n\n# Start Up\n\nAll services can be initialised from the command-line by running the\n[services](https://github.com/FIWARE/tutorials.Relationships-Linked-Data/blob/master/services) Bash script provided\nwithin the repository. Please clone the repository and create the necessary images by running the commands as shown:\n\n```bash\ngit clone https://github.com/FIWARE/tutorials.Working-with-Linked-Data.git\ncd tutorials.Working-with-Linked-Data\n\n./services orion\n```\n\n> **Note:** If you want to clean up and start over again you can do so with the following command:\n>\n> ```\n> ./services stop\n> ```\n",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"name": "NGSI-LD Working with Linked Data",
+		"description": "[![FIWARE Core Context Management](https://nexus.lab.fiware.org/repository/raw/public/badges/chapters/core.svg)](https://github.com/FIWARE/catalogue/blob/master/core/README.md)\n[![NGSI LD](https://img.shields.io/badge/NGSI-linked_data-red.svg)](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.01.01_60/gs_CIM009v010101p.pdf)\n\nThis tutorial teaches FIWARE users how to architect and design a system based on **linked data** and to alter linked\ndata context programmatically. The tutorial extends the knowledge gained from the equivalent\n[NGSI-v2 tutorial](https://github.com/FIWARE/tutorials.Accessing-Context/) and enables a user understand how to write\ncode in an [NGSI-LD](https://www.etsi.org/deliver/etsi_gs/CIM/001_099/009/01.01.01_60/gs_CIM009v010101p.pdf) capable\n[Node.js](https://nodejs.org/) [Express](https://expressjs.com/) application in order to retrieve and alter context\ndata. This removes the need to use the command-line to invoke cUrl commands.\n\nThe tutorial is mainly concerned with discussing code written in Node.js, however some of the results can be checked by\nmaking [cUrl](https://ec.haxx.se/) commands.\n\nThe `docker-compose` files for this tutorial can be found on GitHub: \n\n![GitHub](https://fiware.github.io/tutorials.Working-with-Linked-Data/icon/GitHub-Mark-32px.png) [FIWARE 603: Traversing Linked Data Programmatically](https://github.com/Fiware/tutorials.Working-with-Linked-Data)\n\n\n# Working with Linked Data Entities\n\n> -   “This is the house that Jack built.\n> -   This is the malt that lay in the house that Jack built.\n> -   This is the rat that ate the malt<br/> That lay in the house that Jack built.\n> -   This is the cat<br/> That killed the rat that ate the malt<br/> That lay in the house that Jack built.\n> -   This is the dog that chased the cat<br/> That killed the rat that ate the malt<br/> That lay in the house that\n>     Jack built.”\n>\n> ― This Is the House That Jack Built, Traditional English Nursery Rhyme\n\nNSGI-LD is an evolution of NGSI-v2, so it should not be surprising that Smart solutions based on NSGI-LD will need to\ncover the same basic scenarios as outlined in the previous NGSI-v2\n[tutorial](https://github.com/FIWARE/tutorials.Accessing-Context/) on programatic data access.\n\nNGSI-LD Linked data formalizes the structure of context entities to a greater degree, through restricting data\nattributes to be defined as either _Property_ attributes or _Relationship_ attributes only. This means that it is\npossible to traverse the context data graph with greater certainty when moving from one _Relationship_ to another. All\nthe context data entities within the system are defined by JSON-LD data models, which are formally defined by\nreferencing a context file, and this programatic definition should guarantee that the associated linked entity exists.\n\nThree basic data access scenarios for the supermaket are defined below:\n\n-   Reading Data - e.g. Give me all the data for the **Building** entity `urn:ngsi-ld:Building:store001`\n-   Aggregation - e.g. Combine the **Products** entities sold in **Building** `urn:ngsi-ld:Building:store001` and\n    display the goods for sale\n-   Altering context within the system - e.g. Make a sale of a product:\n    -   Update the daily sales records by the price of the **Product**\n    -   decrement the `numberOfItems` of the **Shelf** entity\n    -   Create a new Transaction Log record showing the sale has occurred\n    -   Raise an alert in the warehouse if less than 10 objects remain on sale\n    -   etc.\n\nFurther advanced scenarios will be covered in later tutorials\n\n## Linked Data Entities within a stock management system\n\nThe supermarket data created in the [previous tutorial](https://github.com/FIWARE/tutorials.Relationships-Linked-Data/)\nwill be loaded into the context broker. The existing relationships between the entities are defined as shown below:\n\n![](https://fiware.github.io/tutorials.Relationships-Linked-Data/img/entities-ld.png)\n\nThe **Building**, **Product**, **Shelf** and **StockOrder** entities will be used to display data on the frontend of our\ndemo application.\n\n## The teaching goal of this tutorial\n\nThe aim of this tutorial is to improve developer understanding of programmatic access of context data through defining\nand discussing a series of generic code examples covering common data access scenarios. For this purpose a simple\nNode.js Express application will be created.\n\nThe intention here is not to teach users how to write an application in Express - indeed any language could have been\nchosen. It is merely to show how **any** sample programming language could be used alter the context to achieve the\nbusiness logic goals.\n\nObviously, your choice of programming language will depend upon your own business needs - when reading the code below\nplease keep this in mind and substitute Node.js with your own programming language as appropriate.\n\n# Stock Management Frontend\n\nAll the code Node.js Express for the demo can be found within the `ngsi-ld` folder within the GitHub repository.\n[Stock Management example](https://github.com/FIWARE/tutorials.Step-by-Step/tree/master/context-provider). The\napplication runs on the following URLs:\n\n-   `http://localhost:3000/app/store/urn:ngsi-ld:Building:store001`\n-   `http://localhost:3000/app/store/urn:ngsi-ld:Building:store002`\n-   `http://localhost:3000/app/store/urn:ngsi-ld:Building:store003`\n-   `http://localhost:3000/app/store/urn:ngsi-ld:Building:store004`\n\n> :information_source: **Tip** Additionally, you can also watch the status of recent requests yourself by following the\n> container logs or viewing information on `localhost:3000/app/monitor` on a web browser.\n>\n> ![FIWARE Monitor](https://fiware.github.io/tutorials.Accessing-Context/img/monitor.png)\n\n# Prerequisites\n\n## Docker\n\nTo keep things simple all components will be run using [Docker](https://www.docker.com). **Docker** is a container\ntechnology which allows to different components isolated into their respective environments.\n\n-   To install Docker on Windows follow the instructions [here](https://docs.docker.com/docker-for-windows/)\n-   To install Docker on Mac follow the instructions [here](https://docs.docker.com/docker-for-mac/)\n-   To install Docker on Linux follow the instructions [here](https://docs.docker.com/install/)\n\n**Docker Compose** is a tool for defining and running multi-container Docker applications. A\n[YAML file](https://raw.githubusercontent.com/fiware/tutorials.Relationships-Linked-Data/master/docker-compose.yml) is\nused configure the required services for the application. This means all container services can be brought up in a\nsingle command. Docker Compose is installed by default as part of Docker for Windows and Docker for Mac, however Linux\nusers will need to follow the instructions found [here](https://docs.docker.com/compose/install/)\n\n## Cygwin\n\nWe will start up our services using a simple bash script. Windows users should download [cygwin](http://www.cygwin.com/)\nto provide a command-line functionality similar to a Linux distribution on Windows.\n\n# Architecture\n\nThe demo Supermarket application will send and receive NGSI-LD calls to a compliant context broker. Since the NGSI-LD\ninterface is available on an experimental version of the\n[Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/), the demo application will only make use of one\nFIWARE component.\n\nCurrently, the Orion Context Broker relies on open source [MongoDB](https://www.mongodb.com/) technology to keep\npersistence of the context data it holds. To request context data from external sources, a simple Context Provider NGSI\nproxy has also been added. To visualize and interact with the Context we will add a simple Express application\n\nTherefore, the architecture will consist of three elements:\n\n-   The [Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/) which will receive requests using\n    [NGSI](https://fiware.github.io/specifications/OpenAPI/ngsiv2)\n-   The underlying [MongoDB](https://www.mongodb.com/) database :\n    -   Used by the Orion Context Broker to hold context data information such as data entities, subscriptions and\n        registrations\n-   The **Stock Management Frontend** which will:\n    -   Display store information\n    -   Show which products can be bought at each store\n    -   Allow users to \"buy\" products and reduce the stock count.\n\nSince all interactions between the elements are initiated by HTTP requests, the entities can be containerized and run\nfrom exposed ports.\n\n![](https://fiware.github.io/tutorials.Accessing-Context/img/architecture.png)\n\nThe necessary configuration information for the **Context Provider NGSI proxy** can be seen in the services section the\nof the associated `docker-compose.yml` file:\n\n```yaml\ntutorial:\n    image: fiware/tutorials.context-provider\n    hostname: context-provider\n    container_name: fiware-tutorial\n    networks:\n        - default\n    expose:\n        - \"3000\"\n    ports:\n        - \"3000:3000\"\n    environment:\n        - \"DEBUG=tutorial:*\"\n        - \"WEB_APP_PORT=3000\"\n        - \"NGSI_VERSION=ngsi-ld\"\n        - \"CONTEXT_BROKER=http://orion:1026/ngsi-ld/v1\"\n```\n\nThe `tutorial` container is driven by environment variables as shown:\n\n| Key            | Value                          | Description                                                               |\n| -------------- | ------------------------------ | ------------------------------------------------------------------------- |\n| DEBUG          | `tutorial:*`                   | Debug flag used for logging                                               |\n| WEB_APP_PORT   | `3000`                         | Port used by the Context Provider NGSI proxy and web-app for viewing data |\n| CONTEXT_BROKER | `http://orion:1026/ngsi-ld/v1` | URL of the context broker to connect to update context                    |\n\nThe other `tutorial` container configuration values described in the YAML file are not used in this section of the\ntutorial.\n\nThe configuration information for MongoDB and the Orion Context Broker has been described in a\n[previous tutorial](https://github.com/FIWARE/tutorials.Relationships-Linked-Data/)\n\n# Start Up\n\nAll services can be initialised from the command-line by running the\n[services](https://github.com/FIWARE/tutorials.Relationships-Linked-Data/blob/master/services) Bash script provided\nwithin the repository. Please clone the repository and create the necessary images by running the commands as shown:\n\n```bash\ngit clone https://github.com/FIWARE/tutorials.Working-with-Linked-Data.git\ncd tutorials.Working-with-Linked-Data\n\n./services orion\n```\n\n> **Note:** If you want to clean up and start over again you can do so with the following command:\n>\n> ```\n> ./services stop\n> ```\n",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "513743",
+		"_collection_link": "https://fiware.postman.co/workspace/NGSI-v2-Tutorials~56ef8b2e-ab05-408c-bbe9-7714cfe08cf6/collection/513743-0bffb109-7af9-4ce3-b269-a53cb1e5c8e8?action=share&source=collection_link&creator=513743"
 	},
 	"item": [
 		{
@@ -20,13 +22,14 @@
 								"type": "text"
 							},
 							{
-								"key": "Content-Type",
-								"value": "application/ld+json",
-								"type": "text"
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
 							}
 						],
 						"url": {
-							"raw": "http://{{orion}}/ngsi-ld/v1/entities/urn:ngsi-ld:Building:store001/?type=Building&options=keyValues",
+							"raw": "http://{{orion}}/ngsi-ld/v1/entities/urn:ngsi-ld:Building:store001/?options=keyValues",
 							"protocol": "http",
 							"host": [
 								"{{orion}}"
@@ -39,10 +42,6 @@
 								""
 							],
 							"query": [
-								{
-									"key": "type",
-									"value": "Building"
-								},
 								{
 									"key": "options",
 									"value": "keyValues"
@@ -59,7 +58,6 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "f7057145-c2b9-4699-be04-77675a4bd430",
 						"type": "text/javascript",
 						"exec": [
 							""
@@ -69,15 +67,13 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "05969c16-3c69-423d-87c6-6d5bb3e7fa27",
 						"type": "text/javascript",
 						"exec": [
 							""
 						]
 					}
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Aggregating and Traversing Linked Data",
@@ -93,13 +89,14 @@
 								"type": "text"
 							},
 							{
-								"key": "Content-Type",
-								"value": "application/ld+json",
-								"type": "text"
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
 							}
 						],
 						"url": {
-							"raw": "http://{{orion}}/ngsi-ld/v1/entities/urn:ngsi-ld:Building:store001/?type=Building&options=keyValues&attrs=furniture",
+							"raw": "http://{{orion}}/ngsi-ld/v1/entities/urn:ngsi-ld:Building:store001/?options=keyValues&attrs=furniture",
 							"protocol": "http",
 							"host": [
 								"{{orion}}"
@@ -112,10 +109,6 @@
 								""
 							],
 							"query": [
-								{
-									"key": "type",
-									"value": "Building"
-								},
 								{
 									"key": "options",
 									"value": "keyValues"
@@ -141,14 +134,15 @@
 								"type": "text"
 							},
 							{
-								"key": "Content-Type",
-								"value": "application/ld+json",
-								"type": "text"
-							},
-							{
 								"key": "Accept",
 								"value": "application/json",
 								"type": "text"
+							},
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
 							}
 						],
 						"url": {
@@ -197,15 +191,16 @@
 								"type": "text"
 							},
 							{
-								"key": "Content-Type",
-								"value": "application/ld+json",
+								"key": "Accept",
+								"value": "application/json",
 								"type": "text"
 							},
 							{
-								"key": "Accept",
-								"value": "application/json",
+								"key": "",
+								"value": "",
 								"type": "text",
-								"name": "Accept"
+								"name": "Accept",
+								"disabled": true
 							}
 						],
 						"url": {
@@ -244,8 +239,7 @@
 					"response": []
 				}
 			],
-			"description": "To display information at the till, it is necessary to discover information about the products found within a Store.\nFrom the Data Entity diagram we can ascertain that:\n\n-   **Building** entities hold related **Shelf** information within the `furniture` _Relationship_\n-   **Shelf** entities hold related **Product** information within the `stocks` _Relationship_\n-   Products hold `name` and `price` as _Property_ attributes of the **Product** entity itself.\n\nTherefore the code for the `displayTillInfo()` method will consist of the following steps.\n\n1. Make a request to the Context Broker to _find shelves within a known store_\n2. Reduce the result to a `id` parameter and make a second request to the Context Broker to _retrieve stocked products\n   from shelves_\n3. Reduce the result to a `id` parameter and make a third request to the Context Broker to _retrieve product details for\n   selected shelves_\n\nTo users familar with database joins, it may seem strange being forced to making a series of requests like this, however\nit is necessary due to scalability issues/concerns in a large distributed setup. Direct join requests are not possible\nwith NGSI-LD.",
-			"protocolProfileBehavior": {}
+			"description": "To display information at the till, it is necessary to discover information about the products found within a Store.\nFrom the Data Entity diagram we can ascertain that:\n\n-   **Building** entities hold related **Shelf** information within the `furniture` _Relationship_\n-   **Shelf** entities hold related **Product** information within the `stocks` _Relationship_\n-   Products hold `name` and `price` as _Property_ attributes of the **Product** entity itself.\n\nTherefore the code for the `displayTillInfo()` method will consist of the following steps.\n\n1. Make a request to the Context Broker to _find shelves within a known store_\n2. Reduce the result to a `id` parameter and make a second request to the Context Broker to _retrieve stocked products\n   from shelves_\n3. Reduce the result to a `id` parameter and make a third request to the Context Broker to _retrieve product details for\n   selected shelves_\n\nTo users familar with database joins, it may seem strange being forced to making a series of requests like this, however\nit is necessary due to scalability issues/concerns in a large distributed setup. Direct join requests are not possible\nwith NGSI-LD."
 		},
 		{
 			"name": "Updating Linked Data",
@@ -328,7 +322,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{ \"numberOfItems\": { \"type\": \"Property\", \"value\": 10 } }"
+							"raw": "{ \"numberOfItems\": { \"type\": \"Property\", \"value\": 9 } }"
 						},
 						"url": {
 							"raw": "http://{{orion}}/ngsi-ld/v1/entities/urn:ngsi-ld:Shelf:unit001/attrs",
@@ -348,8 +342,7 @@
 					},
 					"response": []
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		},
 		{
 			"name": "Interoperability using Linked Data",
@@ -366,7 +359,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"id\": \"urn:ngsi-ld:Building:store005\",\n    \"type\": \"ビル\",\n    \"カテゴリー\": {\n    \t\"type\": \"Property\",\n        \"value\": [\"コマーシャル\"]\n    },\n    \"住所\": {\n        \"type\": \"Property\",\n        \"value\": {\n            \"streetAddress\": \"Eisenacher Straße 98\",\n            \"addressRegion\": \"Berlin\",\n            \"addressLocality\": \"Marzahn\",\n            \"postalCode\": \"12685\"\n        }\n    },\n    \"場所\": {\n        \"type\": \"GeoProperty\",\n        \"value\": {\n             \"type\": \"Point\",\n             \"coordinates\": [13.5646, 52.5435]\n        }\n    },\n    \"名前\": {\n        \"type\": \"Property\",\n        \"value\": \"Yuusui-en\"\n    },\n    \"@context\":\"https://fiware.github.io/tutorials.Step-by-Step/japanese-context.jsonld\"\n}"
+							"raw": "{\n    \"id\": \"urn:ngsi-ld:Building:store005\",\n    \"type\": \"ビル\",\n    \"カテゴリー\": {\n    \t\"type\": \"VocabularyProperty\",\n        \"vocab\": [\"コマーシャル\"]\n    },\n    \"住所\": {\n        \"type\": \"Property\",\n        \"value\": {\n            \"streetAddress\": \"Eisenacher Straße 98\",\n            \"addressRegion\": \"Berlin\",\n            \"addressLocality\": \"Marzahn\",\n            \"postalCode\": \"12685\"\n        }\n    },\n    \"場所\": {\n        \"type\": \"GeoProperty\",\n        \"value\": {\n             \"type\": \"Point\",\n             \"coordinates\": [13.5646, 52.5435]\n        }\n    },\n    \"名前\": {\n        \"type\": \"Property\",\n        \"value\": \"Yuusui-en\"\n    },\n    \"@context\":\"http://context/japanese-user-context.jsonld\"\n}"
 						},
 						"url": {
 							"raw": "http://{{orion}}/ngsi-ld/v1/entities/",
@@ -392,7 +385,8 @@
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/ld+json"
+								"value": "application/json",
+								"disabled": true
 							},
 							{
 								"key": "Link",
@@ -431,7 +425,8 @@
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/ld+json"
+								"value": "application/ld+json",
+								"disabled": true
 							},
 							{
 								"key": "Link",
@@ -442,8 +437,7 @@
 								"key": "Accept",
 								"value": "application/json",
 								"type": "text",
-								"name": "Accept",
-								"disabled": true
+								"name": "Accept"
 							}
 						],
 						"url": {
@@ -475,18 +469,19 @@
 							},
 							{
 								"key": "Accept",
-								"value": "application/json",
+								"value": "application/ld+json",
 								"type": "text",
 								"name": "Accept"
 							},
 							{
 								"key": "Link",
 								"value": "<{{japanese-context.jsonld}}>; rel=\"http://www.w3.org/ns/json-ld#context\"; type=\"application/ld+json\"",
-								"type": "text"
+								"type": "text",
+								"disabled": true
 							}
 						],
 						"url": {
-							"raw": "http://{{context-provider}}/japanese/ngsi-ld/v1/entities/urn:ngsi-ld:Building:store005?",
+							"raw": "http://{{context-provider}}/japanese/ngsi-ld/v1/entities/urn:ngsi-ld:Building:store005?options=keyValues",
 							"protocol": "http",
 							"host": [
 								"{{context-provider}}"
@@ -501,8 +496,7 @@
 							"query": [
 								{
 									"key": "options",
-									"value": "keyValues",
-									"disabled": true
+									"value": "keyValues"
 								}
 							]
 						},
@@ -516,7 +510,6 @@
 				{
 					"listen": "prerequest",
 					"script": {
-						"id": "e93af0c5-33d3-4b9b-b5c5-675f2b6ec644",
 						"type": "text/javascript",
 						"exec": [
 							""
@@ -526,22 +519,19 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "611eaae5-2a6a-41d8-a764-8c7b0ad917b9",
 						"type": "text/javascript",
 						"exec": [
 							""
 						]
 					}
 				}
-			],
-			"protocolProfileBehavior": {}
+			]
 		}
 	],
 	"event": [
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "91cf54e0-d9c1-41af-81a4-50f33ee8fc8e",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -551,7 +541,6 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "57f4bec4-173f-4e09-9032-08844d2c08be",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -561,35 +550,24 @@
 	],
 	"variable": [
 		{
-			"id": "13ad13b0-7943-4168-819a-a210cb66f533",
 			"key": "orion",
-			"value": "localhost:1026",
-			"type": "string"
+			"value": "localhost:1026"
 		},
 		{
-			"id": "3e295de3-71ad-45cf-ab2c-25d0937c5664",
 			"key": "datamodels-context.jsonld",
-			"value": "https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld",
-			"type": "string"
+			"value": "http://context/user-context.jsonld"
 		},
 		{
-			"id": "ca7b4061-b7ed-41da-82de-0f178dc905da",
 			"key": "device-edge",
-			"value": "localhost:1027",
-			"type": "string"
+			"value": "localhost:1027"
 		},
 		{
-			"id": "860a0325-66c5-477d-a9db-877ecc2c20b1",
 			"key": "context-provider",
-			"value": "localhost:3000",
-			"type": "string"
+			"value": "localhost:3000"
 		},
 		{
-			"id": "b37db20d-6a88-4f3f-b767-c941b7e6db94",
 			"key": "japanese-context.jsonld",
-			"value": "https://fiware.github.io/tutorials.Step-by-Step/japanese-context.jsonld",
-			"type": "string"
+			"value": "http://context/japanese-user-context.jsonld"
 		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }
