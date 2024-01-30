@@ -173,8 +173,9 @@ proxy has also been added. To visualize and interact with the Context we will ad
 
 Therefore, the architecture will consist of three elements:
 
--   The [Orion Context Broker](https://fiware-orion.readthedocs.io/en/latest/) which will receive requests using
+-   The [Context Broker](https://fiware-orion.readthedocs.io/en/latest/) which will receive requests using
     [NGSI-LD](https://forge.etsi.org/swagger/ui/?url=https://forge.etsi.org/rep/NGSI-LD/NGSI-LD/raw/master/spec/updated/generated/full_api.json)
+-   An HTTP **Web-Server** which offers static `@context` files defining the context entities within the system for both English and Japanese Users.
 -   The underlying [MongoDB](https://www.mongodb.com/) database :
     -   Used by the Orion Context Broker to hold context data information such as data entities, subscriptions and
         registrations
@@ -229,7 +230,7 @@ All services can be initialised from the command-line by running the
 [services](https://github.com/FIWARE/tutorials.Relationships-Linked-Data/blob/NGSI-v2/services) Bash script provided
 within the repository. Please clone the repository and create the necessary images by running the commands as shown:
 
-```bash
+```console
 git clone https://github.com/FIWARE/tutorials.Working-with-Linked-Data.git
 cd tutorials.Working-with-Linked-Data
 git checkout NGSI-v2
@@ -263,14 +264,14 @@ The code under discussion can be found within the `ngsi-ld/store` controller in 
 As usual, the code for HTTP access can be split out from the business logic of the Supermarket application itself. The
 lower level calls have been placed into a library file, which simplifies the codebase. This needs to be included in the
 header of the file as shown. Some constants are also required - for the Supermarket data, the `LinkHeader` is used to
-define location of the data models JSON-LD context as
-`https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld`.
+define location of the data models JSON-LD context (which) as
+`http://context/ngsi-context.jsonld`.
 
 ```javascript
 const ngsiLD = require('../../lib/ngsi-ld');
 
 const LinkHeader =
-    '<https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json">';
+    '<http://context/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json">';
 ```
 
 ### Retrieve a known Store
@@ -336,7 +337,7 @@ The equivalent cUrl statement can be seen below:
 
 ```console
 curl -G -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Building:store001/' \
--H 'Link: <https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
+-H 'Link: <http://context/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
 -H 'Content-Type: application/json' \
 -d 'options=keyValues'
 ```
@@ -382,7 +383,7 @@ The equivalent cUrl statement can be seen below:
 
 ```console
 curl -G -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Building:store001/' \
--H 'Link: <https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
+-H 'Link: <http://context/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
 -H 'Content-Type: application/json' \
 -d 'options=keyValues' \
 -d 'attrs=furniture' \
@@ -425,7 +426,7 @@ The equivalent cUrl statement can be seen below:
 
 ```console
 curl -G -X GET 'http://localhost:1026/ngsi-ld/v1/entities/' \
--H 'Link: <https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
+-H 'Link: <http://context/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
 -H 'Content-Type: application/json' \
 -H 'Accept: application/json' \
 -d 'type=Shelf' \
@@ -469,7 +470,7 @@ The equivalent cUrl statement can be seen below:
 
 ```console
 curl -G -X GET 'http://localhost:1026/ngsi-ld/v1/entities/' \
--H 'Link: <https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
+-H 'Link: <http://context/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
 -H 'Content-Type: application/json' \
 -H 'Accept: application/json' \
 -d 'type=Product' \
@@ -506,7 +507,7 @@ The equivalent cUrl statement can be seen below:
 
 ```console
 curl -G -X GET 'http://localhost:1026/ngsi-ld/v1/entities/' \
--H 'Link: <https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
+-H 'Link: <http://context/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
 -H 'Content-Type: application/json' \
 -H 'Accept: application/json' \
 -d 'type=Shelf' \
@@ -545,7 +546,7 @@ The equivalent cUrl statement can be seen below:
 
 ```console
 curl -X PATCH 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Shelf:unit001/attrs' \
--H 'Link: <https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
+-H 'Link: <http://context/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
 -H 'Content-Type: application/json' \
 -d '{ "numberOfItems": { "type": "Property", "value": 10 } }'
 ```
@@ -560,21 +561,21 @@ As a demonstration of this, imagine we which to incorporate context data entitie
 using a different schema. Rather than using `name`, `category`, `location` etc, our Japanese context provider is using
 data attributes based on Kanji characters.
 
-The core NGSI-LD `@context` defines that `name` = `https://uri.etsi.org/ngsi-ld/name`, similarly we can define `名前` =
-`https://uri.etsi.org/ngsi-ld/name` and introduce alternate mappings for attribute names and enumerated values.
+The English user NGSI-LD `@context` defines that `name` = `https://schema.org/name`, similarly for a Japanese user we can define `名前` =
+`https://schema.org/name` and introduce alternate mappings for attribute names and enumerated values.
 
 Provided that two systems can agree upon a **common** system of unique URIs for data interchange, they are free to
 locally re-interpret those values within their own domain.
 
 ### Creating an Entity using an Alternate Schema
 
-An alternative Japanese JSON-LD `@context` file has been created and published to an external server. The file can be
-found here: `https://fiware.github.io/tutorials.Step-by-Step/japanese-context.jsonld`. Alternate data mappings can be
+An alternative Japanese JSON-LD `@context` file has been created and published to a web server. Within the docker network, the file can be
+found here: [`http://context/japanese-user-context.jsonld`](./data-models/japanese-user-context.jsonld). Alternate data mappings can be
 found for all attribute names used within the tutorials.
 
 > [!NOTE]
 >  For comparison the standard tutorial JSON-LD `@context` file can be found here:
-> `https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld`
+> [`http://context/user-context.jsonld`](./data-models/user-context.jsonld)
 
 #### 1️⃣ Request:
 
@@ -595,7 +596,10 @@ curl -L -X POST 'http://localhost:1026/ngsi-ld/v1/entities/' \
 --data-raw '{
     "id": "urn:ngsi-ld:Building:store005",
     "type": "ビル",
-    "カテゴリー": {"type": "Property", "value": ["コマーシャル"]},
+    "カテゴリー": {
+        "type": "VocabularyProperty",
+        "vocab": ["コマーシャル"]
+    },
     "住所": {
         "type": "Property",
         "value": {
@@ -607,15 +611,21 @@ curl -L -X POST 'http://localhost:1026/ngsi-ld/v1/entities/' \
     },
     "場所": {
         "type": "GeoProperty",
-        "value": {"type": "Point","coordinates": [13.5646, 52.5435]}
+        "value": {
+             "type": "Point",
+             "coordinates": [13.5646, 52.5435]
+        }
     },
-    "名前": {"type": "Property","value": "Yuusui-en"},
-    "@context":"https://fiware.github.io/tutorials.Step-by-Step/japanese-context.jsonld"
+    "名前": {
+        "type": "Property",
+        "value": "Yuusui-en"
+    },
+    "@context":"http://context/japanese-user-context.jsonld"
 }'
 ```
 
-Note that in this example the name and address have been supplied as simple strings - JSON-LD does support an `@lang`
-definition to allow for internationalization, but this is an advanced topic which will not be discussed here.
+Note that in this example the name and address have been supplied as simple strings - JSON-LD does support a  **LanguageProperty** `@lang`
+definition to allow for internationalization, but this is an advanced topic which will not be discussed here. Note that the `category`/ `カテゴリー` has been defined using a **VocabularyProperty**, so that the enumerated value  `commercial`/ `"コマーシャル` can also be amended via the `@context`.
 
 ### Reading an Entity using the default schema
 
@@ -624,7 +634,7 @@ different attribute short names, the Japanese JSON-LD `@context` file agrees wit
 the full URIs used for a **Building** entity - effectively it is using the same data model.
 
 Therefore it is possible to request the new **Building** (created using the Japanese data model) and have it return
-using the short names specified in the standard tutorial JSON-LD `@context`, this is done by supplying the `Link` header
+using the short names specified in the standard Englisu User JSON-LD `@context`, this is done by supplying the `Link` header
 is pointing to the tutorial JSON-LD `@context` file.
 
 #### 2️⃣ Request:
@@ -632,7 +642,7 @@ is pointing to the tutorial JSON-LD `@context` file.
 ```console
 curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Building:store005' \
 -H 'Content-Type: application/json' \
--H 'Link: <https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"'
+-H 'Link: <http://context/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"'
 ```
 
 #### Response:
@@ -640,9 +650,9 @@ curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Building:s
 The response is an ordinary **Building** entity which standard attribute names (such as `name` and `location` and it
 also returns the standard enumeration for **Building** `category`.
 
-```jsonld
+```json
 {
-    "@context": "https://fiware.github.io/tutorials.Step-by-Step/tutorials-context.jsonld",
+    "@context": "http://context/ngsi-context.jsonld",
     "id": "urn:ngsi-ld:Building:store005",
     "type": "Building",
     "address": {
@@ -659,7 +669,7 @@ also returns the standard enumeration for **Building** `category`.
         "value": { "type": "Point", "coordinates": [13.5646, 52.5435] }
     },
     "name": { "type": "Property", "value": "Yuusui-en" },
-    "category": { "type": "Property", "value": "commercial" }
+    "category": { "type": "VocabularyProperty", "vocab": "commercial" }
 }
 ```
 
@@ -681,24 +691,25 @@ supplied in the `Link` header.
 ```console
 curl -L -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Building:store003' \
 -H 'Content-Type: application/json' \
--H 'Link: <https://fiware.github.io/tutorials.Step-by-Step/japanese-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"'
+-H 'Link: <http://context/japanese-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"'
 ```
 
 #### Response:
 
 The response is mixed - it uses attribute names and enumerations defined in `japanese-context.jsonld` with some
 exceptions. NGSI-LD **is not** JSON-LD, in that the core context is always applied after the contexts received in the
-`Link` header. Since `name` and `location` are reserved attribute names, they are supplied using the default core
+`Link` header. Since `location` is a reserved attribute name, it is always supplied using the default core
 context.
 
-```jsonld
+```json
 {
-    "@context": "https://fiware.github.io/tutorials.Step-by-Step/japanese-context.jsonld",
     "id": "urn:ngsi-ld:Building:store003",
     "type": "ビル",
-    "家具": {
-        "type": "Relationship",
-        "object": ["urn:ngsi-ld:Shelf:unit006", "urn:ngsi-ld:Shelf:unit007", "urn:ngsi-ld:Shelf:unit008"]
+    "カテゴリー": {
+        "type": "VocabularyProperty",
+        "vocab": [
+            "コマーシャル"
+        ]
     },
     "住所": {
         "type": "Property",
@@ -708,13 +719,32 @@ context.
             "addressLocality": "Friedrichshain",
             "postalCode": "10243"
         },
-        "検証済み": { "type": "Property", "value": false }
+        "検証済み": {
+            "type": "Property",
+            "value": false
+        }
     },
-    "name": { "type": "Property", "value": "East Side Galleria" },
-    "カテゴリー": { "type": "Property", "value": "コマーシャル" },
     "location": {
         "type": "GeoProperty",
-        "value": { "type": "Point", "coordinates": [13.4447, 52.5031] }
+        "value": {
+            "type": "Point",
+            "coordinates": [
+                13.4447,
+                52.5031
+            ]
+        }
+    },
+    "名前": {
+        "type": "Property",
+        "value": "East Side Galleria"
+    },
+    "家具": {
+        "type": "Relationship",
+        "object": [
+            "urn:ngsi-ld:Shelf:unit006",
+            "urn:ngsi-ld:Shelf:unit007",
+            "urn:ngsi-ld:Shelf:unit008"
+        ]
     }
 }
 ```
@@ -762,8 +792,7 @@ expansion/compaction operation.
 
 ```console
 curl -L -X GET 'http://localhost:3000/japanese/ngsi-ld/v1/entities/urn:ngsi-ld:Building:store005' \
--H 'Accept: application/json' \
--H 'Link: <https://fiware.github.io/tutorials.Step-by-Step/japanese-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"'
+-H 'Accept: application/ld+json'
 ```
 
 #### Response:
@@ -778,23 +807,56 @@ payload before sending data to the context broker.
 {
     "識別子": "urn:ngsi-ld:Building:store005",
     "タイプ": "ビル",
-    "カテゴリー": { "タイプ": "プロパティ", "値": "コマーシャル" },
     "住所": {
-        "タイプ": "プロパティ",
-        "値": {
-            "addressLocality": "Marzahn",
-            "addressRegion": "Berlin",
-            "postalCode": "12685",
-            "streetAddress": "Eisenacher Straße 98"
-        }
+        "addressLocality": "Marzahn",
+        "addressRegion": "Berlin",
+        "postalCode": "12685",
+        "streetAddress": "Eisenacher Straße 98"
     },
+    "名前": "Yuusui-en",
     "場所": {
-        "タイプ": "ジオプロパティ",
-        "値": { "タイプ": "Point", "座標": [13.5646, 52.5435] }
+        "タイプ": "場",
+        "座標": [
+            13.5646,
+            52.5435
+        ]
     },
-    "名前": { "タイプ": "プロパティ", "値": "Yuusui-en" }
+    "カテゴリー": {
+        "語彙": "コマーシャル"
+    }
 }
 ```
+
+
+It is worth noting that the subattributes of `address` / `住所"` were left undefined by the `@context` files and therefore have remained unconverted. Both  `address` and `住所"` are mapped to the same URI `http://schema.org/address`, it would have been possible to
+include additional mappings for the subattributes using the schema.org ontology as shown:
+
+```json
+{
+    "@context": {
+        "addressLocality": "http://schema.org/addressLocality",
+        "addressRegion": "http://schema.org/addressRegion",
+        "postalCode": "http://schema.org/postalCode",
+        "streetAddress": "http://schema.org/streetAddress"
+    }
+}
+
+```
+
+and their equivalents in Japanese:
+
+```json
+{
+    "@context": {
+        "地方": "http://schema.org/addressLocality",
+        "地域": "http://schema.org/addressRegion",
+        "郵便番号": "http://schema.org/postalCode",
+        "住所": "http://schema.org/streetAddress"
+    }
+}
+
+```
+
 
 #### :arrow_forward: Video: JSON-LD Compaction & Expansion
 

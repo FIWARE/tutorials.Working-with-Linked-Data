@@ -17,7 +17,25 @@
 # see: https://github.com/FIWARE/helm-charts/
 #
 version: "3.8"
-services:  
+services:
+  # @context file is served from here
+  ld-context:
+    labels:
+      org.fiware: 'tutorial'
+    image: httpd:alpine
+    hostname: context
+    container_name: fiware-ld-context
+    ports:
+        - "3004:80"
+    volumes:
+        - data-models:/usr/local/apache2/htdocs/
+        - type: bind
+          source: ${PWD}/conf/mime.types
+          target: /usr/local/apache2/conf/mime.types
+          read_only: true
+    healthcheck:
+      test: (wget --server-response --spider --quiet  http://context/ngsi-context.jsonld 2>&1 | awk 'NR==1{print $$2}'|  grep -q -e "200") || exit 1
+
   # Databases
   mongo-db:
     labels:
@@ -66,19 +84,6 @@ services:
       - "WEB_APP_PORT=${TUTORIAL_APP_PORT}" # Port used by the content provider proxy and web-app for viewing data
       - "NGSI_VERSION=ngsi-ld"
       - "CONTEXT_BROKER=http://orion:${ORION_LD_PORT}/ngsi-ld/v1" # URL of the context broker to update context
-      - "DEVICE_BROKER=http://devices:${ORION_EDGE_PORT}/v2" # URL of the device's context broker to update context
-      - "NGSI_LD_PREFIX=urn:ngsi-ld:"
-      
-      - "IOTA_HTTP_HOST=iot-agent"
-      - "IOTA_HTTP_PORT=${IOTA_SOUTH_PORT}"
-      - "DUMMY_DEVICES_PORT=${TUTORIAL_DUMMY_DEVICE_PORT}" # Port used by the dummy IOT devices to receive commands
-      - "DUMMY_DEVICES_TRANSPORT=HTTP" # Default transport used by dummy Io devices
-
-      - "OPENWEATHERMAP_KEY_ID=<ADD_YOUR_KEY_ID>"
-      - "TWITTER_CONSUMER_KEY=<ADD_YOUR_CONSUMER_KEY>"
-      - "TWITTER_CONSUMER_SECRET=<ADD_YOUR_CONSUMER_SECRET>"
-
-
 
 networks:
   default:
@@ -87,3 +92,9 @@ networks:
 
 volumes:
   mongo-db: ~
+  data-models:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${PWD}/data-models
