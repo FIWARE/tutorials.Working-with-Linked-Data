@@ -124,7 +124,7 @@ NGSI-LD リンクト・データは、_Property_ 属性、または _Relationshi
 # 在庫管理フロントエンド
 
 デモ用のすべてのコード Node.js Express は、GitHub リポジトリ内の `ngsi-ld` フォルダ内にあります。
-[在庫管理の例](https://github.com/FIWARE/tutorials.Step-by-Step/tree/master/context-provider)。
+[在庫管理の例](https://github.com/FIWARE/tutorials.NGSI-v2/tree/master/context-provider)。
 アプリケーションは次の URL で実行されます :
 
 -   `http://localhost:3000/app/store/urn:ngsi-ld:Building:store001`
