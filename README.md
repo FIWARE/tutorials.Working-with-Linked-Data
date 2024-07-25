@@ -341,10 +341,41 @@ function readEntity(entityId, opts, headers = {}) {
 The equivalent cUrl statement can be seen below:
 
 ```console
-curl -G -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Building:store001/' \
+curl -G -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Building:store001' \
 -H 'Link: <http://context/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
 -H 'Content-Type: application/json' \
 -d 'options=keyValues'
+```
+
+And the response from the broker is:
+
+```json
+{
+    "id": "urn:ngsi-ld:Building:store001",
+    "type": "Building",
+    "category": {
+        "vocab": "commercial"
+    },
+    "address": {
+        "streetAddress": "Bornholmer Straße 65",
+        "addressRegion": "Berlin",
+        "addressLocality": "Prenzlauer Berg",
+        "postalCode": "10439"
+    },
+    "location": {
+        "type": "Point",
+        "coordinates": [
+            13.3986,
+            52.5547
+        ]
+    },
+    "name": "Bösebrücke Einkauf",
+    "furniture": [
+        "urn:ngsi-ld:Shelf:unit001",
+        "urn:ngsi-ld:Shelf:unit002",
+        "urn:ngsi-ld:Shelf:unit003"
+    ]
+}
 ```
 
 ## Aggregating and Traversing Linked Data
@@ -391,7 +422,20 @@ curl -G -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Building:s
 -H 'Link: <http://context/ngsi-context.jsonld>; rel="http://www.w3.org/ns/json-ld#context"; type="application/ld+json"' \
 -H 'Content-Type: application/json' \
 -d 'options=keyValues' \
--d 'attrs=furniture' \
+-d 'attrs=furniture'
+```
+And the response from the broker is:
+
+```json
+{
+    "id": "urn:ngsi-ld:Building:store001",
+    "type": "Building",
+    "furniture": [
+        "urn:ngsi-ld:Shelf:unit001",
+        "urn:ngsi-ld:Shelf:unit002",
+        "urn:ngsi-ld:Shelf:unit003"
+    ]
+}
 ```
 
 The response is a JSON Object which includes a `furniture` attribute which can be manipulated further.
@@ -441,7 +485,30 @@ curl -G -X GET 'http://localhost:1026/ngsi-ld/v1/entities/' \
 ```
 
 The response is a JSON Array of **Shelf** entities which includes as `stocks` attribute which can be manipulated
-further. The code below extracts the IDs for later use.
+further.
+
+```json
+[
+    {
+        "id": "urn:ngsi-ld:Shelf:unit001",
+        "type": "Shelf",
+        "numberOfItems": 15,
+        "stocks": "urn:ngsi-ld:Product:001"
+    },
+    {
+        "id": "urn:ngsi-ld:Shelf:unit002",
+        "type": "Shelf",
+        "numberOfItems": 15,
+        "stocks": "urn:ngsi-ld:Product:003"
+    },
+    {
+        "id": "urn:ngsi-ld:Shelf:unit003",
+        "type": "Shelf",
+        "numberOfItems": 15,
+        "stocks": "urn:ngsi-ld:Product:004"
+    }
+]
+```
 
 ```javascript
 const stockedProducts = [];
@@ -486,6 +553,29 @@ curl -G -X GET 'http://localhost:1026/ngsi-ld/v1/entities/' \
 
 The response is a JSON Array of **Product** entities which are then displayed on screen.
 
+```json
+[
+    {
+        "id": "urn:ngsi-ld:Product:001",
+        "type": "Product",
+        "price": 0.99,
+        "name": "Apples"
+    },
+    {
+        "id": "urn:ngsi-ld:Product:003",
+        "type": "Product",
+        "price": 14.99,
+        "name": "Coconuts"
+    },
+    {
+        "id": "urn:ngsi-ld:Product:004",
+        "type": "Product",
+        "price": 50,
+        "name": "Melons"
+    }
+]
+```
+
 ## Updating Linked Data
 
 ### Find a shelf stocking a product
@@ -518,6 +608,31 @@ curl -G -X GET 'http://localhost:1026/ngsi-ld/v1/entities/' \
 -d 'type=Shelf' \
 -d 'options=keyValues' \
 -d 'q=numberOfItems%3E0;locatedIn==%22urn:ngsi-ld:Building:store001%22;stocks==%22urn:ngsi-ld:Product:001%22'
+```
+
+And the response from the broker is the following with nine shelves:
+
+```json
+[
+    {
+        "id": "urn:ngsi-ld:Shelf:unit001",
+        "type": "Shelf",
+        "location": {
+            "type": "Point",
+            "coordinates": [
+                13.398611,
+                52.554699
+            ]
+        },
+        "maxCapacity": 50,
+        "numberOfItems": 15,
+        "name": "Corner Unit",
+        "stocks": "urn:ngsi-ld:Product:001",
+        "locatedIn": "urn:ngsi-ld:Building:store001"
+    }
+
+    ...etc
+]
 ```
 
 ### Update the state of a shelf
