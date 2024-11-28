@@ -71,6 +71,7 @@
         "lock_status": "tutorial:lock_status",
         "luminiscence": "https://w3id.org/saref#luminiscence",
         "macAddress": "fiware:macAddress",
+        "maxCapacity":  "tutorial:maxCapacity",
         "mcc": "fiware:mcc",
         "mnc": "fiware:mnc",
         "motion": "https://w3id.org/saref#motion",
