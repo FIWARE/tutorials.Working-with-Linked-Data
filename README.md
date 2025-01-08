@@ -719,7 +719,7 @@ curl -L -X POST 'http://localhost:1026/ngsi-ld/v1/entities/' \
     "id": "urn:ngsi-ld:Building:store005",
     "type": "ビル",
     "カテゴリー": {
-        "type": "VocabularyProperty",
+        "type": "VocabProperty",
         "vocab": ["コマーシャル"]
     },
     "住所": {
@@ -748,7 +748,7 @@ curl -L -X POST 'http://localhost:1026/ngsi-ld/v1/entities/' \
 
 Note that in this example the name and address have been supplied as simple strings - JSON-LD does support a
 **LanguageProperty** `@lang` definition to allow for internationalization, but this is an advanced topic which will not
-be discussed here. Note that the `category`/ `カテゴリー` has been defined using a **VocabularyProperty**, so that the
+be discussed here. Note that the `category`/ `カテゴリー` has been defined using a **VocabProperty**, so that the
 enumerated value `commercial`/ `"コマーシャル` can also be amended via the `@context`.
 
 ### Reading an Entity using the default schema
@@ -793,7 +793,7 @@ also returns the standard enumeration for **Building** `category`.
         "value": { "type": "Point", "coordinates": [13.5646, 52.5435] }
     },
     "name": { "type": "Property", "value": "Yuusui-en" },
-    "category": { "type": "VocabularyProperty", "vocab": "commercial" }
+    "category": { "type": "VocabProperty", "vocab": "commercial" }
 }
 ```
 
@@ -829,7 +829,7 @@ exceptions. NGSI-LD **is not** JSON-LD, in that the core context is always appli
     "id": "urn:ngsi-ld:Building:store003",
     "type": "ビル",
     "カテゴリー": {
-        "type": "VocabularyProperty",
+        "type": "VocabProperty",
         "vocab": ["コマーシャル"]
     },
     "住所": {
@@ -976,4 +976,4 @@ Click on the image above to watch a video JSON-LD expansion and compaction with 
 
 ## License
 
-[MIT](LICENSE) © 2020-2024 FIWARE Foundation e.V.
+[MIT](LICENSE) © 2020-2025 FIWARE Foundation e.V.

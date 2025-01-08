@@ -820,4 +820,4 @@ Context Broker にデータを送信する前に、逆の展開/圧縮操作を�
 
 ## License
 
-[MIT](LICENSE) © 2020-2024 FIWARE Foundation e.V.
+[MIT](LICENSE) © 2020-2025 FIWARE Foundation e.V.
