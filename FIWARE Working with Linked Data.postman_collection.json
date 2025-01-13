@@ -359,7 +359,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"id\": \"urn:ngsi-ld:Building:store005\",\n    \"type\": \"ビル\",\n    \"カテゴリー\": {\n    \t\"type\": \"VocabularyProperty\",\n        \"vocab\": [\"コマーシャル\"]\n    },\n    \"住所\": {\n        \"type\": \"Property\",\n        \"value\": {\n            \"streetAddress\": \"Eisenacher Straße 98\",\n            \"addressRegion\": \"Berlin\",\n            \"addressLocality\": \"Marzahn\",\n            \"postalCode\": \"12685\"\n        }\n    },\n    \"場所\": {\n        \"type\": \"GeoProperty\",\n        \"value\": {\n             \"type\": \"Point\",\n             \"coordinates\": [13.5646, 52.5435]\n        }\n    },\n    \"名前\": {\n        \"type\": \"Property\",\n        \"value\": \"Yuusui-en\"\n    },\n    \"@context\":\"http://context/japanese-user-context.jsonld\"\n}"
+							"raw": "{\n    \"id\": \"urn:ngsi-ld:Building:store005\",\n    \"type\": \"ビル\",\n    \"カテゴリー\": {\n    \t\"type\": \"VocabProperty\",\n        \"vocab\": [\"コマーシャル\"]\n    },\n    \"住所\": {\n        \"type\": \"Property\",\n        \"value\": {\n            \"streetAddress\": \"Eisenacher Straße 98\",\n            \"addressRegion\": \"Berlin\",\n            \"addressLocality\": \"Marzahn\",\n            \"postalCode\": \"12685\"\n        }\n    },\n    \"場所\": {\n        \"type\": \"GeoProperty\",\n        \"value\": {\n             \"type\": \"Point\",\n             \"coordinates\": [13.5646, 52.5435]\n        }\n    },\n    \"名前\": {\n        \"type\": \"Property\",\n        \"value\": \"Yuusui-en\"\n    },\n    \"@context\":\"http://context/japanese-user-context.jsonld\"\n}"
 						},
 						"url": {
 							"raw": "http://{{orion}}/ngsi-ld/v1/entities/",
