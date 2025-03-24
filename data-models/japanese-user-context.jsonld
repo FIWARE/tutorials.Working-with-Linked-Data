@@ -26,6 +26,12 @@
     "場所": "core:location",
     "プロパティ": "core:Property",
     "プロパティ": "core:Relationship",
-    "ジオプロパティ": "core:GeoProperty"
+    "ジオプロパティ": "core:GeoProperty",
+
+    "streetAddress": "schema:streetAddress",
+    "addressLocality": "schema:addressLocality",
+    "addressRegion": "schema:addressRegion",
+    "postalCode": "schema:postalCode"
+
     }
 }
