@@ -835,10 +835,10 @@ exceptions. NGSI-LD **is not** JSON-LD, in that the core context is always appli
     "住所": {
         "type": "Property",
         "value": {
-            "streetAddress": "Mühlenstrasse 10",
-            "addressRegion": "Berlin",
-            "addressLocality": "Friedrichshain",
-            "postalCode": "10243"
+            "schema:streetAddress": "Mühlenstrasse 10",
+            "schema:addressRegion": "Berlin",
+            "schema:addressLocality": "Friedrichshain",
+            "schema:postalCode": "10243"
         },
         "検証済み": {
             "type": "Property",
@@ -922,10 +922,10 @@ payload before sending data to the context broker.
     "識別子": "urn:ngsi-ld:Building:store005",
     "タイプ": "ビル",
     "住所": {
-        "addressLocality": "Marzahn",
-        "addressRegion": "Berlin",
-        "postalCode": "12685",
-        "streetAddress": "Eisenacher Straße 98"
+        "schema:addressLocality": "Marzahn",
+        "schema:addressRegion": "Berlin",
+        "schema:postalCode": "12685",
+        "schema:streetAddress": "Eisenacher Straße 98"
     },
     "名前": "Yuusui-en",
     "場所": {
