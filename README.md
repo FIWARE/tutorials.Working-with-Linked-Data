@@ -16,7 +16,7 @@
 This tutorial teaches FIWARE users how to architect and design a system based on **linked data** and to alter linked
 data context programmatically. The tutorial extends the knowledge gained from the equivalent
 [NGSI-v2 tutorial](https://github.com/FIWARE/tutorials.Accessing-Context/) and enables a user understand how to write
-code in an [NGSI-LD](https://cim.etsi.org/NGSI-LD/official/0--1.html) capable
+code in an [NGSI-LD](https://cim.etsi.org/NGSI-LD/official/front-page.html) capable
 [Node.js](https://nodejs.org/) [Express](https://expressjs.com/) application in order to retrieve and alter context
 data. This removes the need to use the command-line to invoke cUrl commands.
 
