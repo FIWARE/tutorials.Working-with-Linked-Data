@@ -16,9 +16,9 @@
 This tutorial teaches FIWARE users how to architect and design a system based on **linked data** and to alter linked
 data context programmatically. The tutorial extends the knowledge gained from the equivalent
 [NGSI-v2 tutorial](https://github.com/FIWARE/tutorials.Accessing-Context/) and enables a user understand how to write
-code in an [NGSI-LD](https://cim.etsi.org/NGSI-LD/official/front-page.html) capable
-[Node.js](https://nodejs.org/) [Express](https://expressjs.com/) application in order to retrieve and alter context
-data. This removes the need to use the command-line to invoke cUrl commands.
+code in an [NGSI-LD](https://cim.etsi.org/NGSI-LD/official/front-page.html) capable [Node.js](https://nodejs.org/)
+[Express](https://expressjs.com/) application in order to retrieve and alter context data. This removes the need to use
+the command-line to invoke cUrl commands.
 
 The tutorial is mainly concerned with discussing code written in Node.js, however some of the results can be checked by
 making [cUrl](https://ec.haxx.se/) commands.
@@ -364,17 +364,10 @@ And the response from the broker is:
     },
     "location": {
         "type": "Point",
-        "coordinates": [
-            13.3986,
-            52.5547
-        ]
+        "coordinates": [13.3986, 52.5547]
     },
     "name": "Bösebrücke Einkauf",
-    "furniture": [
-        "urn:ngsi-ld:Shelf:unit001",
-        "urn:ngsi-ld:Shelf:unit002",
-        "urn:ngsi-ld:Shelf:unit003"
-    ]
+    "furniture": ["urn:ngsi-ld:Shelf:unit001", "urn:ngsi-ld:Shelf:unit002", "urn:ngsi-ld:Shelf:unit003"]
 }
 ```
 
@@ -424,17 +417,14 @@ curl -G -X GET 'http://localhost:1026/ngsi-ld/v1/entities/urn:ngsi-ld:Building:s
 -d 'options=keyValues' \
 -d 'attrs=furniture'
 ```
+
 And the response from the broker is:
 
 ```json
 {
     "id": "urn:ngsi-ld:Building:store001",
     "type": "Building",
-    "furniture": [
-        "urn:ngsi-ld:Shelf:unit001",
-        "urn:ngsi-ld:Shelf:unit002",
-        "urn:ngsi-ld:Shelf:unit003"
-    ]
+    "furniture": ["urn:ngsi-ld:Shelf:unit001", "urn:ngsi-ld:Shelf:unit002", "urn:ngsi-ld:Shelf:unit003"]
 }
 ```
 
